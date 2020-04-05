@@ -1,0 +1,103 @@
+{template '_header'}
+<div class="page-header">
+    当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}大礼包类型 <small>{if !empty($item['id'])}修改【{$item['name']}】{/if}</small></span>
+</div>
+<div class="page-content">
+    <div class="page-sub-toolbar">
+        <span class=''>
+            {ifp 'packagegoods.packagegoods_type.add'}
+                <a class="btn btn-primary btn-sm" href="{php echo webUrl('packagegoods/packagegoods_type/add')}">添加大礼包类型</a>
+            {/if}
+        </span>
+    </div>
+    <form  {ife 'packagegoods.packagegoods_type' $item}action="" method="post"{/if} class="form-horizontal form-validate" enctype="multipart/form-data" >
+    {if !empty($item)}
+        <div class="form-group">
+            <label class="col-lg control-label">大礼包类型链接(点击复制)</label>
+            <div class="col-sm-9 col-xs-12">
+                <p class='form-control-static'>
+                    <a href='javascript:;' title='点击复制链接' class="js-clip" data-url="{php echo mobileUrl('packagegoods/packagegoods_type',array('type_id'=>$item['id']),true)}">
+                        {php echo mobileUrl('packagegoods/packagegoods_type',array('type_id'=>$item['id']),true)}
+                    </a>
+                </p>
+            </div>
+        </div>
+    {/if}
+    <div class="form-group">
+        <label class="col-lg control-label">排序</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.packagegoods_type' $item}
+                <input type="text" name="displayorder" class="form-control" value="{$item['displayorder']}" />
+            {else}
+                <div class='form-control-static'>{$item['displayorder']}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label must">礼包类型名称</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.packagegoods_type' $item}
+                <input type="text" name="catename" class="form-control" value="{$item['name']}" data-rule-required="true" />
+            {else}
+                <div class='form-control-static'>{$item['name']}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label">礼包类型图片</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.packagegoods_type' $item}
+                {php echo tpl_form_field_image2('thumb', $item['thumb'])}
+                <span class="help-block">建议尺寸: 100*100，或正方型图片 </span>
+            {else}
+                {if !empty($item['thumb'])}
+                    <a href='{php echo tomedia($item['thumb'])}' target='_blank'>
+                        <img src="{php echo tomedia($item['thumb'])}" style='width:100px;border:1px solid #ccc;padding:1px' />
+                    </a>
+                {/if}
+            {/if}
+        </div>
+    </div>
+    <div class="form-group" style="display: none;">
+        <label class="col-lg control-label">是否大礼包首页推荐</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.goods' $item}
+                <label class="radio-inline">
+                    <input type="radio" name='isrecommand' value="1" {if $item['isrecommand']==1}checked{/if} /> 是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name='isrecommand' value="0" {if empty($item['isrecommand'])}checked{/if} /> 否
+                </label>
+            {else}
+                <div class='form-control-static'>{if empty($item['isrecommand'])}是{else}否{/if}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label">是否大礼包首页显示</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.packagegoods_type' $item}
+                <label class='radio-inline'>
+                    <input type='radio' name='enabled' value=1' {if $item['enabled']==1}checked{/if} /> 是
+                </label>
+                <label class='radio-inline'>
+                    <input type='radio' name='enabled' value=0' {if $item['enabled']==0}checked{/if} /> 否
+                </label>
+            {else}
+                <div class='form-control-static'>{if empty($item['enabled'])}否{else}是{/if}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group"></div>
+    <div class="form-group">
+        <label class="col-lg control-label"></label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.packagegoods_type' $item}
+                <input type="submit" value="提交" class="btn btn-primary"  />
+            {/if}
+            <input type="button" name="back" onclick='history.back()' {ifp 'packagegoods.packagegoods_type.add|packagegoods.packagegoods_type.edit'}style='margin-left:10px;'{/if} value="返回列表" class="btn btn-default" />
+        </div>
+    </div>
+    </form>
+</div>
+{template '_footer'}

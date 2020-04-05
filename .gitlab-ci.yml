@@ -1,0 +1,92 @@
+image: "yidaotech/php-gitlab-runner"
+
+variables:
+  COMPOSER_INSTALLER: https://mirrors.aliyun.com/composer/composer.phar
+  MYSQL_DATABASE: "ydb_test"
+  MYSQL_ROOT_PASSWORD: "root"
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - curl $COMPOSER_INSTALLER > composer.phar
+  - chmod +x composer.phar
+  - mv composer.phar composer
+  - php composer config repo.packagist composer $COMPOSER_MIRROR
+  - php composer clear-cache
+  - php composer -vvv install
+  - php composer -vvv update
+
+
+stages:
+  - test
+  - deploy
+
+unit-test:
+  stage: test
+  services:
+    - name: mysql:5.7
+      alias: mysql
+    - name: yidaotech/redis
+      alias: redis-test
+
+  only:
+    - ydb
+    - ydb-dev
+    - bugfix
+  script:
+    - touch /tmp/php-output.txt
+    - MODE=test_ci
+    - export MODE
+    - vendor/bin/doctrine-migrations migrate --write-sql=data/migration.sql
+    - vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text --colors=never
+
+deploy_dev:
+  stage: deploy
+  only:
+    - ydb-dev
+  when: manual
+  script:
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - echo "$DEPLOY_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+    - ssh-add <(echo "$DEPLOY_PRIVATE_KEY")
+    - PROJECT_NAMESPACE=$(cut -d'/' -f1 <<<"$PROJECT")
+    - PROJECT_NAME=$(cut -d'/' -f2 <<<"$PROJECT")
+    - mkdir -p build/$PROJECT_NAMESPACE
+    - tar -C /builds/$PROJECT_NAMESPACE/$PROJECT_NAME --exclude '.git' --exclude 'build' -zcf build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz .
+    - ssh root@$HOST_DEV "mkdir -p /data/build/dev"
+    - scp build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz root@$HOST_DEV:/data/build/dev/$PROJECT_NAME\.tgz
+    - VERSION=$(date +"%Y%m%d%H%m%S")
+    - ssh root@$HOST_DEV "tar xzf /data/build/dev/$PROJECT_NAME\.tgz -C /data/docker-projects/dev/$PROJECT_NAME\_dev/ydb/app-root/src/"
+    - ssh root@$HOST_DEV "chmod 777 -R /data/docker-projects/dev/$PROJECT_NAME\_dev/ydb/app-root/src/"
+    - ssh root@$HOST_DEV "docker exec $PROJECT_NAME\_dev_$PROJECT_NAME\_dev-ydb_1 ./vendor/bin/doctrine-migrations migrations:migrate --no-interaction"
+    - ssh root@$HOST_DEV "docker exec $PROJECT_NAME\_dev_$PROJECT_NAME\_dev-ydb_1 rm -rf data/tpl/*"
+
+deploy_production:
+  stage: deploy
+  only:
+    - ydb
+  when: manual
+  script:
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - echo "$DEPLOY_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+    - ssh-add <(echo "$DEPLOY_PRIVATE_KEY")
+    - PROJECT_NAMESPACE=$(cut -d'/' -f1 <<<"$PROJECT")
+    - PROJECT_NAME=$(cut -d'/' -f2 <<<"$PROJECT")
+    - mkdir -p build/$PROJECT_NAMESPACE
+    - tar -C /builds/$PROJECT_NAMESPACE/$PROJECT_NAME --exclude '.git' --exclude 'build' -zcf build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz .
+    - ssh root@$HOST "mkdir -p /data/build"
+    - scp build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz root@$HOST:/data/build/$PROJECT_NAME\.tgz
+    - VERSION=$(date +"%Y%m%d%H%m%S")
+    - ssh root@$HOST "mkdir -p /data/docker-projects/$PROJECT_NAME/ydb/app-root/backup/$VERSION; cp -r /data/docker-projects/$PROJECT_NAME/ydb/app-root/src/ /data/docker-projects/$PROJECT_NAME/ydb/app-root/backup/$VERSION"
+    - ssh root@$HOST "tar xzf /data/build/$PROJECT_NAME\.tgz -C /data/docker-projects/$PROJECT_NAME/ydb/app-root/src/"
+    - ssh root@$HOST "chmod 777 -R /data/docker-projects/$PROJECT_NAME/ydb/app-root/src/"
+    - ssh root@$HOST "docker exec $PROJECT_NAME\_$PROJECT_NAME\-ydb_1 ./vendor/bin/doctrine-migrations migrations:migrate --no-interaction"
+    - ssh root@$HOST "docker exec $PROJECT_NAME\_$PROJECT_NAME\-ydb_1 rm -rf data/tpl/*"
+
+

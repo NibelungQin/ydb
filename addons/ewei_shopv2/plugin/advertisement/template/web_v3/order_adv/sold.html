@@ -1,0 +1,158 @@
+{if $list}
+<div class="page-table-header"  style="border-top: none">
+    <input type="checkbox">
+    <div class="btn-group">
+        {ifp 'advertisement.order_adv.edit'}
+            {if $_GPC['type']=='sale' || $_GPC['type']=='store'}
+                <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('advertisement/order_adv/status',array('status'=>1))}">
+                    <i class='icow icow-shangjia2'></i> 审核通过
+                </button>
+            {/if}
+            {if $_GPC['type']=='sold' || empty($_GPC['type'])}
+                <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('advertisement/order_adv/status',array('status'=>2))}">
+                    <i class='icow icow-xiajia3'></i> 审核失败
+                </button>
+            {/if}
+            {if $_GPC['type']=='sold' || empty($_GPC['type'])}
+                <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('advertisement/order_adv/status',array('status'=>0))}">
+                    <i class='icow icow-xiajia3'></i> 待审核
+                </button>
+            {/if}
+        {/if}
+    </div>
+</div>
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr>
+            <th style="width:25px;"></th>
+            <!--<th style="width:180px;">订单编号</th>-->
+            <th style="width:70px;">广告标题</th>
+            <th style="width:120px;">&nbsp;</th>
+            <th style="width:80px;">广告价</th>
+            <th style="width:70px;">商品标题</th>
+            <th style="width:120px;">&nbsp;</th>
+            <th style="width:70px;">所属商家</th>
+
+            <th style="width:100px;text-align:center;">已接任务人数/任务人数限制</th>
+            <th style="width:70px;text-align:center;">分享次数</th>
+            <th style="width:70px;text-align:center;">浏览量</th>
+
+            <th style="width:135px;text-align:center;">发布时间</th>
+            <th style="width:70px;">审核状态</th>
+            <th style="width:70px;">上下架</th>
+            <th style="text-align: center;width: 65px;">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {loop $list $row}
+            <tr>
+                <td><input type='checkbox' value="{$row['id']}"/></td>
+                <!--<td>-->
+                <!--{ifp 'advertisement.order_adv.edit'}-->
+                <!--<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo webUrl('advertisement/order_adv/property',array('type'=>'ordersn','id'=>$row['id']))}">{$row['ordersn']}</a>-->
+                <!--{else}-->
+                <!--{$row['ordersn']}-->
+                <!--{/if}-->
+                <!--</td>-->
+                <td>
+                    <img src="{php echo tomedia($row['adv_thumb'])}" style="width:40px;height:40px;padding:1px;border:1px solid #ccc;" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'"/>
+                </td>
+                <td>
+                    {$row['adv_title']}
+                </td>
+                <td>{$row['adv_price']}</td>
+                <td>
+                    <img src="{php echo tomedia($row['g_thumb'])}" style="width:40px;height:40px;padding:1px;border:1px solid #ccc;" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'"/>
+                </td>
+                <td>
+                    {$row['g_title']}
+                </td>
+                <td>{$row['merchname']}</td>
+                <td style="text-align:center;">
+                    {$row['task_num']}/{$row['task_limit_num']}
+                </td>
+                <td style="text-align:center;">
+                    {$row['share_num']}
+                </td>
+                <td style="text-align:center;">
+                    {$row['seen_num']}
+                </td>
+                <td>
+                    {php echo date('Y-m-d H:i:s',$row['createtime'])}
+                </td>
+                <td >
+                    <span class='label {if $row['status']==1}label-primary{else}label-default{/if}'>
+                        {if $row['status']==0}
+                            审核中
+                        {elseif $row['status']==1}
+                            已通过
+                        {elseif $row['status']==2}
+                            未通过
+                         {/if}
+                    </span>
+                </td>
+                <td >
+                    <span class='label {if $row['o_g_status']==1}label-primary{else}label-default{/if}'
+                    {ifp 'advertisement.order_adv.edit'}
+                    data-toggle='ajaxSwitch'
+                    data-switch-value='{$row['o_g_status']}'
+                    data-switch-value0='0|下架|label label-default|{php echo webUrl('advertisement/order_adv/property',array('type'=>'o_g_status', 'value'=>1,'id'=>$row['id']))}'
+                    data-switch-value1='1|上架|label label-primary|{php echo webUrl('advertisement/order_adv/property',array('type'=>'o_g_status', 'value'=>0,'id'=>$row['id']))}'
+                    {/if}>{if $row['o_g_status']==1}上架{else}下架{/if}</span>
+                </td>
+                <td >
+                    {ifp 'advertisement.order_adv.view|advertisement.order_adv.edit'}
+                        <a class='btn btn-default btn-sm btn-op btn-operation' href="{php echo webUrl('advertisement/order_adv/edit',array('id' => $row['id']));}">
+                            <span data-toggle="tooltip" data-placement="top" title="" data-original-title=" {ifp 'advertisement.order_adv'}设置编辑{else}设置查看{/if}">
+                                {ifp 'advertisement.order_adv'}
+                                    <i class='icow icow-bianji2'></i>
+                                {else}
+                                    <i class='icow icow-chakan-copy'></i>
+                                {/if}
+                           </span>
+                        </a>
+                    {/if}
+                    <!--{ifp 'advertisement.order_adv.delete'}-->
+                        <!--<a class='btn btn-default btn-sm btn-op btn-operation' data-toggle='ajaxRemove' href="{php echo webUrl('advertisement/order_adv/delete',array('id' => $row['id']));}" data-confirm="确定要删除该广告套餐吗？">-->
+                            <!--<span data-toggle="tooltip" data-placement="top" title="" data-original-title="删除">-->
+                                 <!--<i class='icow icow-shanchu1'></i>-->
+                            <!--</span>-->
+                        <!--</a>-->
+                    <!--{/if}-->
+                </td>
+            </tr>
+        {/loop}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td colspan="3">
+                <div class="btn-group">
+                    {ifp 'advertisement.order_adv.edit'}
+                    {if $_GPC['type']=='sale' || $_GPC['type']=='store'}
+                    <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('advertisement/order_adv/status',array('status'=>1))}">
+                        <i class='icow icow-shangjia2'></i> 审核通过
+                    </button>
+                    {/if}
+                    {if $_GPC['type']=='sold' || empty($_GPC['type'])}
+                    <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('advertisement/order_adv/status',array('status'=>2))}">
+                        <i class='icow icow-xiajia3'></i> 审核失败
+                    </button>
+                    {/if}
+                    {if $_GPC['type']=='sold' || empty($_GPC['type'])}
+                    <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('advertisement/order_adv/status',array('status'=>0))}">
+                        <i class='icow icow-xiajia3'></i> 待审核
+                    </button>
+                    {/if}
+                    {/if}
+                </div>
+            </td>
+            <td colspan="6" class="text-right">{$pager}</td>
+        </tr>
+    </tfoot>
+</table>
+{else}
+<div class='panel panel-default'>
+    <div class='panel-body' style='text-align: center;padding:30px;'>暂时没有任何广告套餐</div>
+</div>
+{/if}

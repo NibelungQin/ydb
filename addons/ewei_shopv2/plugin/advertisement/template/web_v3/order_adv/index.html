@@ -1,0 +1,79 @@
+{template '_header'}
+<style type="text/css">
+.table_kf {display: none;width:100%}
+.table_kf.active {display: table;}
+</style>
+<div class="page-header">
+    当前位置：<span class="text-primary">广告套餐</span>
+</div>
+<div class="page-content">
+    <form action="./index.php" method="get" class="form-horizontal" plugins="form">
+        <input type='hidden' id='tab' name='type' value="{$_GPC['type']}"/>
+        <input type="hidden" name="c" value="site"/>
+        <input type="hidden" name="a" value="entry"/>
+        <input type="hidden" name="m" value="ewei_shopv2"/>
+        <input type="hidden" name="do" value="web"/>
+        <input type="hidden" name="r" value="advertisement.order_adv"/>
+        <div class="page-toolbar m-b-sm m-t-sm">
+            <div class="col-sm-6 pull-right">
+                <div class="input-group">
+                    <div class="input-group-select">
+                        <select name='status' class='form-control  input-sm' style='width:100px;'>
+                            <option value='' {if $_GPC['status']==''}selected{/if}>状态</option>
+                            <option value='0' {if $_GPC['status']=='0'}selected{/if}>审核中</option>
+                            <option value='1' {if $_GPC['status']=='1'}selected{/if} >已通过</option>
+                            <option value='1' {if $_GPC['status']=='2'}selected{/if} >未通过</option>
+                        </select>
+                    </div>
+                    <div class="input-group-select">
+                        <select name='searchfield'  class='form-control  input-sm select-md'   style="width:110px;"  >
+                            <!--<option value='orderno' {if $_GPC['searchfield']=='orderno'}selected{/if}>订单号</option>-->
+                            <!--<option value='merchid' {if $_GPC['searchfield']=='merchid'}selected{/if}>门店ID</option>-->
+                            <!--<option value='merchname' {if $_GPC['searchfield']=='merchname'}selected{/if}>门店名称</option>-->
+                            <option value='adv_title' {if $_GPC['searchfield']=='adv_title'}selected{/if}>广告名称</option>
+                            <option value='goodstitle' {if $_GPC['searchfield']=='goodstitle'}selected{/if}>商品名称</option>
+                            <!--<option value='goodssn' {if $_GPC['searchfield']=='goodssn'}selected{/if}>商品编码</option>-->
+                        </select>
+                    </div>
+                    <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="请输入关键词">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-arrow-next nav-tabs" id="myTab" >
+            <li class="{if $_GPC['type']=='sale' || empty($_GPC['type'])}active{/if}" >
+                <a href="{php echo webUrl('advertisement/order_adv',array('type'=>sale))}">待审核 (<span class='goods-ing'>-</span>)</a>
+            </li>
+            <li class="{if $_GPC['type']=='sold'}active{/if}" >
+                <a href="{php echo webUrl('advertisement/order_adv',array('type'=>sold))}">已通过 (<span class='goods-sold'>-</span>)</a>
+            </li>
+            <li class="{if $_GPC['type']=='store'}active{/if}" >
+                <a href="{php echo webUrl('advertisement/order_adv',array('type'=>store))}">未通过 (<span class='goods-store'>-</span>)</a>
+            </li>
+        </ul>
+    </form>
+    <form action="" method="post">
+        <div class="table_kf {if $_GPC['type']=='sale' || empty($_GPC['type'])}active{/if}" id="tab_sale">{template 'advertisement/order_adv/sale'}</div>
+        <div class="table_kf {if $_GPC['type']=='sold'}active{/if}" id="tab_sold">{template 'advertisement/order_adv/sold'}</div>
+        <div class="table_kf {if $_GPC['type']=='store'}active{/if}" id="tab_store">{template 'advertisement/order_adv/store'}</div>
+    </form>
+</div>
+<script type="text/javascript">
+$(function(){
+    /*
+     * 审核中 1 已通过 2 未通过 3
+     * */
+    $.getJSON("{php echo webUrl('advertisement/order_adv/total');}",{ type: "1"},function(json){
+        $(".goods-ing").text(json);
+        $.getJSON("{php echo webUrl('advertisement/order_adv/total');}",{ type: "2"},function(json){
+            $(".goods-sold").text(json);
+            $.getJSON("{php echo webUrl('advertisement/order_adv/total');}",{ type: "3"},function(json){
+                $(".goods-store").text(json);
+            });
+        });
+    });
+})
+</script>
+{template '_footer'}

@@ -1,0 +1,16 @@
+.idea
+logs
+data/logs/
+data/tpl/
+composer.lock
+.composer
+.well-known
+vendor
+!/addons/ewei_shopv2/vendor/
+/attachment/images/
+/attachment/videos/
+/data/config.php
+/data/install.lock
+/coverage/
+/nbproject/
+/data/migration.sql

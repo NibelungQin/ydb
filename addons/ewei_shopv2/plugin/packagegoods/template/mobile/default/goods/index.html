@@ -1,0 +1,174 @@
+{template '_header'}
+{php $this->followBar()}
+<title>礼包详情</title>
+<link rel="stylesheet" href="../addons/ewei_shopv2/plugin/packagegoods/template/mobile/default/css/style.css?v=2018531" />
+<style type="text/css">
+	.creditshop-detail-page .fui-navbar .abtn{height:2.6rem;width:40%;font-size:12px;-webkit-border-radius: 0;border-radius: 0;padding:0.5rem 0 0 0;display: block;float:left;
+		line-height: 0.8rem;}
+	.creditshop-detail-page .fui-navbar .homeabtn{height:2.6rem;width:20%;font-size:12px;-webkit-border-radius: 0;border-radius: 0;margin:0;padding:0;display: block;float:left;background: #fff;
+		color:#666;border:none;line-height: 2.6rem;}
+	.homeabtn .icon{font-size:1rem;}
+	.text-danger span{color:#ef4f4f;font-size:1rem;}
+</style>
+<div class='fui-page creditshop-detail-page'>
+	{if is_h5app()}
+		<div class="fui-header">
+			<div class="fui-header-left">
+				<a class="back"></a>
+			</div>
+			<div class="title">{php echo m('plugin')->getName('packagegoods')}</div>
+			<div class="fui-header-right"></div>
+		</div>
+	{else}
+		<a href="{php echo mobileUrl('order')}" class="iconfont icon lynn_back_icon back">&#xe755;</a>
+	{/if}
+
+	<div class='fui-content'>
+		{if !is_mobile()}<div class="pcshop-index">{/if}
+		<div class="fui-swipe" data-speed="5000" data-gap="5">
+			<div class="fui-swipe-wrapper">
+				{loop $goods['thumb_url'] $thumb}
+					<div class="fui-swipe-item">
+						<img src="{php echo tomedia($thumb)}" alt="{$goods['title']}" onerror="this.src='../addons/ewei_shopv2/static/images/nopic100.jpg'">
+					</div>
+				{/loop}
+			</div>
+			<div class="fui-swipe-page">
+				{loop $goods['thumb_url'] $thumb}
+					<div class="fui-swipe-bullet"></div>
+				{/loop}
+			</div>
+		</div>
+		<style>
+			.sale_count{
+				font-size: 0.6rem;
+				color: #999;
+				line-height: 2rem;
+			}
+		</style>
+		<style>
+			.package_label {
+				min-width: 2.25rem;
+				text-align: center;
+				padding: 0 0.3rem;
+				box-shadow: 0 0 0.5rem 0 rgba(255, 221, 221, 0.8);
+				margin: 0 0.25rem;
+				font-size: 0.55rem;
+				font-weight: bold;
+				line-height: 0.85rem;
+				color: #ff6000;
+				border-radius: 0.1rem;
+				display: inline-block;
+				background-image: -webkit-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				background-image: -moz-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				background-image: -ms-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				background-image: -o-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+			.package_style {
+				min-width: 2.25rem;
+				text-align: center;
+				padding: 0 0.3rem;
+				box-shadow: 0 0 0.5rem 0 rgba(255, 221, 221, 0.8);
+				margin: 0 0.25rem;
+				font-size: 0.55rem;
+				font-weight: bold;
+				line-height: 0.85rem;
+				color: #ff6000;
+				border-radius: 0.1rem;
+				display: inline-block;
+				background-image: -webkit-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				background-image: -moz-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				background-image: -ms-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				background-image: -o-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+		</style>
+		<div class="lynn_goods_head">
+			<h2 class="lynn_goods_head_title" style="font-size: 0.7rem;white-space: normal;">
+				{$goods['title']}
+			</h2>
+			<!--<span class="lynn_goods_follow"  >-->
+				<!--<i class="iconfont icon">&#xe606;</i><i class="iconfont icon on">&#xe605;</i>收藏-->
+			<!--</span>-->
+			<a style="float:right;margin-top:-1rem;" class="fui-cell-remark share" id='btn-task-share'>
+				<i class="icon icon-share" style="display:block;width:1.1rem;height:1.1rem;margin-left:0.3rem;"></i>
+				<p >分享</p>
+			</a>
+			<div class="subtitle">
+				<!--<span>礼包类型：</span>-->
+				{if $goods['packagedata']['commission_package'] == 1}
+					<!--<span class="package_style">分销礼包</span>-->
+				{/if}
+				{if $goods['packagedata']['globonus_package'] == 1}
+					<!--<span class="package_style">店铺礼包</span>-->
+				{/if}
+				{if $goods['packagedata']['abonus_package'] == 1}
+					<!--<span class="package_style">区域礼包</span>-->
+				{/if}
+			</div>
+			<div class="subtitle">
+				<!--<span>礼包标签：</span>-->
+				<!--{if $goods['package_label']['material_package_label'] == 1}-->
+					<!--<span class="package_label">实物</span>-->
+				<!--{/if}-->
+				{if $goods['package_label']['virtual_package_label'] == 1}
+					<!--<span class="package_label">虚拟</span>-->
+				{/if}
+				{if $goods['package_label']['recharge_package_label'] == 1}
+					<!--<span class="package_label">充值</span>-->
+				{/if}
+			</div>
+			<div class="subtitle">
+				已有<b>{$goods['sales']}</b>人购买此礼包
+			</div>
+			<div class="price">
+				<strong>¥ {$goods['packageprice']}元</strong>
+				<del>原价¥ {$goods['price']}</del>
+			</div>
+		</div>
+
+		<!--分享弹层-->
+		<div id='cover'>
+			<div class='fui-mask-m visible'></div>
+			<div class='arrow'></div>
+			<div class='content'>{if empty($share['goods_detail_text'])}请点击右上角<br/>通过【发送给朋友】<br/>邀请好友购买{else}{$share['goods_detail_text']}{/if}</div>
+		</div>
+
+		<div class="lynn_goods_invitation">
+			<div class="invitation-title">礼包规则</div>
+			<div class="fui-cell-group" style="margin-top: 0">
+				<a href="{php echo mobileUrl('packagegoods/team/rules')}" class="fui-cell" style="text-decoration:none;padding: 0.4rem 0.6rem 0.45rem 0;">
+					<div class="fui-cell-info" style="color: #999;font-size: 0.65rem;">根据购买不同的礼包类型，升级不同的会员身份</div>
+					<div class="fui-cell-remark"></div>
+				</a>
+			</div>
+		</div>
+		<div class="lynn_goods_content">
+			<div class="lynn_goods_content_title"><span>图文详情</span></div>
+			<div class="lynn_goods_content_info content-images" id="content">
+				{$goods['content']}
+			</div>
+		</div>
+		<div style="height:2.5rem;"></div>
+		{if !is_mobile()}</div>{/if}
+	</div>
+	<div class="fui-navbar bordert" style="z-index:100;padding:0;display: flex;-webkit-flex: 1">
+		<a class="homeabtn btn btn-warning {if empty($goods['stock'])}disabled{/if} external" style="padding-top: 0.3rem" href="{php echo mobileUrl('packagegoods')}">
+			<p class="icon icon-home1" style="line-height: 1rem"></p>
+			<p style="line-height: 1rem">礼包首页</p>
+		</a>
+		<a class="lynn_goods_btn lynn_btn_waring btn-single" href="javascript:void(0);" style="line-height: 2.5rem;padding:0rem;">
+			购买礼包
+		</a>
+	</div>
+	<div class='layer'style="display: none" ></div>
+</div>
+<script language='javascript'>
+    require(['../addons/ewei_shopv2/plugin/packagegoods/static/js/goods.js'], function (modal) {
+        modal.init({$goods['id']},{$goods['more_spec']});
+    });
+</script>
+{template '_footer'}

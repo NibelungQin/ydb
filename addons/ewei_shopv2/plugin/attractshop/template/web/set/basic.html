@@ -1,0 +1,15 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">是否开启招商奖励</label>
+    <div class="col-sm-8">
+    	{ifp 'attractshop.set.edit'}
+			<label class="radio-inline"><input type="radio"  name="data[open]" value="0" {if $data['open'] ==0} checked="checked"{/if} /> 不开启</label>
+			<label class="radio-inline"><input type="radio"  name="data[open]" value="1" {if $data['open'] ==1} checked="checked"{/if} /> 开启</label>
+		{else}
+			{if $data['open'] ==0}不开启{else}开启{/if}
+		{/if}
+    </div>
+</div>
+
+
+
+

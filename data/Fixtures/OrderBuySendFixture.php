@@ -1,0 +1,32 @@
+<?php
+declare(strict_types=1);
+
+namespace Ydb\Data\Fixtures;
+
+
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Ydb\Entity\Manual\OrderBuySend;
+
+class OrderBuySendFixture implements FixtureInterface
+{
+
+    /**
+     * Load data fixtures with the passed EntityManager
+     *
+     * @param ObjectManager $manager
+     */
+    public function load(ObjectManager $manager)
+    {
+        $orderBuySend = new OrderBuySend();
+        $manager->persist($orderBuySend);
+
+        $orderBuySend = new OrderBuySend();
+        $manager->persist($orderBuySend);
+
+        $orderBuySend = new OrderBuySend();
+        $manager->persist($orderBuySend);
+
+        $manager->flush();
+    }
+}

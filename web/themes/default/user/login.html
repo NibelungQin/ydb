@@ -1,0 +1,115 @@
+{template 'common/header-base'}
+<div class="system-login" {if !empty($_W['setting']['copyright']['background_img'])} style="background-image:url('{php echo tomedia($_W['setting']['copyright']['background_img']);}')" {else} style="background-image: url('./resource/images/xbig-banner.jpg');" {/if}>
+<style>
+	body{overflow: hidden;
+		width:100%;height: 100%;}
+	.login-panel .title, .register .title {
+		text-align: center;
+		font-size: 16px;
+		color: #1a1a1a;
+		line-height: 60px;
+		margin-bottom: 0px !important;
+		border-bottom: 0px solid #e7e7eb !important;
+	}
+	.bg{position: absolute;width:100%;height:100%;position: absolute;left:0;right:0;}
+	.bg img{width: 100%;max-height: 100%;}
+	.login{padding: 100px;}
+	.login-left,.login-panel, .register-panel{position: relative!important;left:0;top:0;right:0;bottom: 0;display: inline-block;z-index:10000;}
+	.login-left{color:#fff;background: none;line-height: 40px;}
+	.login-left h3{margin:20px 0 30px}
+	.login-panel, .register-panel{padding: 40px 40px;border-radius: 10px;background: rgba(255,255,255,0.5);box-shadow:0 0 5px 2px rgba(0,0,0,0.1);float: right;}
+	.we7-form label, form label{margin-bottom: 20px;}
+	.we7-form input[type=radio]+label:before, .we7-form input[type=radio]+label:after, .we7-form input[type=checkbox]+label:before, .we7-form input[type=checkbox]+label:after{border-radius: 50%;}
+	.rember{color:#555;font-size: 12px;}
+	.login-bottom{position: fixed;padding-top:100px;width:100%;display: flex;align-items: center; bottom: 70px;}
+	.login-bottom a{display: inline-block;width:33.3%;color:#666;}
+	.column{font-size: 14px;display: flex;align-items: center;flex-direction: column;width:100%;text-align: center;line-height: 30px;}
+	.column img{width:78px;height: auto;}
+	.column p{margin:10px 0 0;}
+	.column p:last-child{font-size: 21px;margin:0;}
+
+</style>
+<div class="bg">
+	<img src="resource/yidaobaoImg/bg.jpg">
+</div>
+<div class="login">
+	<div class="login-left">
+		<h2>一道宝管理系统</h2>
+		<h3>YIDAOBAO MANAGEMENT SYSTEM</h3>
+		<h4>用青春创造美好世界 让商业触手可及</h4>
+	</div>
+	<div class="login-panel">
+		<form action="" method="post" role="form" id="form1" onsubmit="return formcheck();" class="we7-form">
+			<div class="input-group-vertical">
+
+				<input name="username" type="text"  placeholder="请输入用户名登录" class="form-control">
+
+				<input name="password" type="password" class="form-control password" placeholder="请输入登录密码">
+				{if !empty($_W['setting']['copyright']['verifycode'])}
+				<div class="input-group">
+					<input name="verify" type="text" class="form-control" placeholder="请输入验证码">
+					<a href="javascript:;" id="toggle" class="input-group-btn imgverify"><img id="imgverify" src="{php echo web_url('utility/code')}" title="点击图片更换验证码" /></a>
+				</div>
+				{/if}
+			</div>
+			<div class="checkbox">
+				<input type="checkbox" value="true" id="rember" name="rember">
+				<label for="rember">记住密码</label>
+			</div>
+			<div class="login-submit text-center">
+				<input type="submit" id="submit" name="submit" value="登录" class="btn btn-primary btn-block" />
+				<input name="token" value="{$_W['token']}" type="hidden" />
+			</div>
+		</form>
+	</div>
+	<div class="login-bottom">
+		<a href="https://yidaobao.yidaoit.com/web/index.php?c=user&a=login">
+		<div class="column">
+			<img src="./resource/yidaobaoImg/index.png">
+			<p class="font16">首页</p>
+			<p>Home Page Login</p>
+		</div>
+		</a>
+		<a href="https://yidaobao.yidaoit.com/web/merchant.php?c=site&a=entry&m=ewei_shopv2&do=web&r=login">
+		<div class="column">
+			<img src="./resource/yidaobaoImg/personnel.png">
+			<p class="font16">合作商</p>
+			<p>Collaborative Login Entry</p>
+		</div>
+		</a>
+		<a href="#">
+		<div class="column">
+			<img src="./resource/yidaobaoImg/qudao.png">
+			<p class="font16">渠道</p>
+			<p>Channel Login Entrance</p>
+		</div>
+		</a>
+	</div>
+</div>
+</div>
+
+<script>
+	function formcheck() {
+		if($('#remember:checked').length == 1) {
+			cookie.set('remember-username', $(':text[name="username"]').val());
+		} else {
+			cookie.del('remember-username');
+		}
+		return true;
+	}
+	var h = document.documentElement.clientHeight;
+	$(".system-login").css('height',h);
+	$('#toggle').click(function() {
+		$('#imgverify').prop('src', '{php echo web_url('utility/code')}r='+Math.round(new Date().getTime()));
+		return false;
+	});
+	{if !empty($_W['setting']['copyright']['verifycode'])}
+	$('#form1').submit(function() {
+		var verify = $(':text[name="verify"]').val();
+		if (verify == '') {
+			alert('请填写验证码');
+			return false;
+		}
+	});
+	{/if}
+</script>

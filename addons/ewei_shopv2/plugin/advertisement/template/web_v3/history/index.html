@@ -1,0 +1,137 @@
+{template '_header'}
+<style>
+    .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+        border: none;
+        border-top: 1px solid #efefef;
+    }
+</style>
+<div class="page-header">
+    当前位置：<span class="text-primary">赏金记录 </span>
+</div>
+<div class="page-content">
+    <form action="" method="get">
+        <div class="page-content" style="display: block;">
+            <div class="main">
+                <div class="page-toolbar m-b-sm m-t-sm">
+                    <input type="hidden" name="c" value="site">
+                    <input type="hidden" name="a" value="entry">
+                    <input type="hidden" name="m" value="ewei_shopv2">
+                    <input type="hidden" name="do" value="web">
+                    <input type="hidden" name="r" value="advertisement.history">
+                    <div class="col-sm-5">
+                        <div class="btn-group btn-group-sm" style='float:left'>
+                            {php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d H:i', $starttime),'endtime'=>date('Y-m-d H:i', $endtime)),true);}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 pull-right">
+                        <div class="input-group">
+                            <!--<div class="input-group-select">-->
+                                <!--<select name="kdtype" class="form-control  input-sm select-md" >-->
+                                    <!--<option value="type">赏金类型</option>-->
+                                    <!--<option value="status">记录状态</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                            <!--<input type="text" class="form-control input-sm" name="keyword" value="" placeholder="请输入关键词">-->
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit" id="so"> 搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-default">
+                    <div class="panel-body table-responsive" style="padding:0;">
+                        {if count($record)>0}
+                        <form action="" method="post">
+                            <table class="table table-hover ">
+                                <thead class="navbar-inner">
+                                    <tr>
+                                        <th style="width:80px; text-align: center;">赏金类型</th>
+                                        <th style="width:160px;text-align: center;">赏金金额（单位：/元）</th>
+                                        <th style="width:130px;text-align: center;">记录状态</th>
+                                        <th style="width:150px;text-align: center;">所属任务</th>
+                                        <th style="width:80px;text-align: center;">获赏人昵称</th>
+                                        <th style="width:130px;text-align: center;">记录时间</th>
+                                        <!--<th style="width:119px;text-align: center;">记录详情</th>-->
+                                    </tr>
+                                </thead>
+                                <tbody style="text-align: center;">
+                                    {loop $record $key $value}
+                                        <tr>
+                                            <td style="display:block;width:100px !important;">
+                                                <a  class="label label-
+                                            {if $value['type']==1}
+                                                primary
+                                            {elseif $value['type']==2}
+                                                success
+                                            {/if}">
+                                                    {if $value['type']==1}
+                                                        任务赏金
+                                                    {elseif $value['type']==2}
+                                                        分享赏金
+                                                    {/if}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {if $value['type'] == 1}
+                                                    {$value['task_bonus']}
+                                                {elseif $value['type'] == 2}
+                                                    {$value['share_bonus']}
+                                                {/if}
+                                            </td>
+
+                                            <td>
+                                                {if $value['type'] == 1}
+                                                    {if $value['task_bonus_status'] == 1}
+                                                        已发放
+                                                    {elseif $value['task_bonus_status'] == 2}
+                                                        发放失败
+                                                    {elseif $value['task_bonus_status'] == 0}
+                                                        未发放
+                                                    {/if}
+                                                {elseif $value['type'] == 2}
+                                                    {if $value['share_bonus_status'] == 1}
+                                                        已发放
+                                                    {elseif $value['share_bonus_status'] == 2}
+                                                        发放失败
+                                                    {elseif $value['share_bonus_status'] == 0}
+                                                        未发放
+                                                    {/if}
+                                                {/if}
+                                            </td>
+                                            <td>{$value['adv_name']['title']}</td>
+                                            <td><a>{$value['nickname']['nickname']}</a></td>
+                                            <td>
+                                                {if $value['type'] == 1}
+                                                {php echo date('Y-m-d H:i',$value['task_createtime']);}
+                                                {elseif $value['type'] == 2}
+                                                {php echo date('Y-m-d H:i',$value['share_createtime']);}
+                                                {/if}
+                                            </td>
+                                            <!--<td style="cursor: pointer"><a class="text-primary" data-toggle="ajaxModal" data-href="{php echo webUrl('advertisement/history/detail',array('id'=>$value['id']),1);}">点击查看</a></td>-->
+                                        </tr>
+                                    {/loop}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" style="text-align: right">{$pager}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </form>
+                        <div style="text-align:right;width:100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    {else}
+        <div class="panel panel-default">
+            <div class="panel-body empty-data">暂时没有任何赏金记录</div>
+        </div>
+    {/if}
+</div>
+
+
+{template '_footer'}

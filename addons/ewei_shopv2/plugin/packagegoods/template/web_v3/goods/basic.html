@@ -1,0 +1,1162 @@
+<style type="text/css">
+    .img-thumbnail {width: 100px;height: 100px;}
+</style>
+<!--设置购买大礼包设置分销奖励模式设置-->
+<style>
+    table {
+        display: table;
+        border-collapse: separate;
+        border-spacing: 2px;
+        border-color: grey;
+    }
+    dl {
+        display: block;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+    }
+    tr {
+        display: table-row;
+        vertical-align: inherit;
+        border-color: inherit;
+    }
+    table#WSY_t1 th {
+        line-height: 30px;
+        text-align: center;
+    }
+    table#WSY_t2 th {
+        line-height: 30px;
+        text-align: center;
+    }
+    .WSY_table_header th {
+        color: #fff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .WSY_table {
+        table-layout: fixed;
+        empty-cells: show;
+        border-collapse: collapse;
+        /*margin-left: 18px;*/
+        /*margin-top: 15px;*/
+    }
+    tbody {
+        display: table-row-group;
+        vertical-align: middle;
+        border-color: inherit;
+    }
+    table#WSY_t1 td {
+        border: 1px solid #efefef;
+        padding: 0 1em 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: left;
+    }
+    table#WSY_t2 td {
+        border: 1px solid #efefef;
+        padding: 0 1em 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: left;
+    }
+    td {
+        height: 40px;
+    }
+    td, th {
+        display: table-cell;
+        vertical-align: inherit;
+    }
+    input, img, textarea {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    td input {
+        display: block;
+        margin: auto;
+        width: 100%;
+    }
+    input {
+        -webkit-appearance: textfield;
+        background-color: white;
+        -webkit-rtl-ordering: logical;
+        cursor: text;
+        padding: 1px;
+        border-width: 2px;
+        border-style: inset;
+        border-color: initial;
+        border-image: initial;
+    }
+</style>
+    <div class="form-group">
+        <label class="col-lg control-label">排序</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.goods' $item}
+            <input type='text' class='form-control' name='displayorder' value="{$item['displayorder']}" />
+            <span class="help-block">数字越大，排名越靠前,如果为空，默认排序方式为创建时间</span>
+            {else}
+            <div class='form-control-static'>{$item['displayorder']}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label">礼包标题：</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.goods' $item}
+            <input type='text' id='title' class='form-control' name='title' value="{$item['title']}" />
+            {else}
+            <div class='form-control-static'>{$item['title']}</div>
+            {/if}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg control-label">礼包简短介绍：</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'packagegoods.goods' $item}
+            <input type='text' id='description' class='form-control' name='description' value="{$item['description']}" />
+            {else}
+            <div class='form-control-static'>{$item['description']}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label">礼包类型：</label>
+        <div class="col-sm-9 col-xs-12" style="margin-top:3px;">
+            {ife 'packagegoods.goods' $item}
+
+                <div class="p_1" style="width:100%;float:left;margin-bottom:6px;">
+                    <div class="p_t_1" style="float:left;width:120px;height:28px;">
+                        <div class="p_type_1" style="float:left;margin-right:10px;margin-top:3px;">
+                            <input id="package_commission_type" type="checkbox" name="commission_package" value="1" {if intval($item['packagedata']['commission_package']) ==1 }checked="checked"{/if}>
+                        </div>
+                        <p style="flaot:left;line-height:28px;">分销礼包</p>
+                    </div>
+                    <select id="package_type_1" {if intval($item['packagedata']['commission_package']) ==1 }style="width:338px;margin-bottom:3px;{else}style="width:338px;margin-bottom:3px;display:none;{/if}" class="form-control tpl-category-parent select2" name="commission_package_level" style="float:left !important;">
+                        {loop $commission_level $row}
+                            <option value="{$row['id']}" {if $item['packagedata']['commission_package_level']==$row['id']}selected{/if}>{$row['levelname']}</option>
+                        {/loop}
+                    </select>
+                </div>
+
+                <div class="p_2" style="width:100%;float:left;margin-bottom:6px;">
+                    <div class="p_t_2" style="float:left;width:120px;height:28px;">
+                        <div class="p_type_2" style="float:left;margin-right:10px;margin-top:3px;">
+                            <input id="package_globonus_type" type="checkbox" name="globonus_package" value="1" {if intval($item['packagedata']['globonus_package']) ==1 }checked="checked"{/if}>
+                        </div>
+                        <p style="flaot:left;line-height:28px;">店铺奖励礼包</p>
+                    </div>
+                    <select id="package_type_2" {if intval($item['packagedata']['globonus_package']) ==1 }style="width:338px;margin-bottom:3px;"{else}style="width:338px;margin-bottom:3px;display:none;"{/if} class="form-control tpl-category-parent select2" name="globonus_package_level" style="float:left !important;">
+                        {loop $globonus_level $row}
+                            <option value="{$row['id']}" {if $item['packagedata']['globonus_package_level']==$row['id']}selected{/if}>{$row['levelname']}</option>
+                        {/loop}
+                    </select>
+                </div>
+                <div class="p_4" style="width:100%;float:left;margin-bottom:6px;">
+                    <div class="p_t_4" style="float:left;width:120px;height:28px;">
+                        <div class="p_type_4" style="float:left;margin-right:10px;margin-top:3px;">
+                            <input id="package_member_type" type="checkbox" name="member_package" value="1" {if intval($item['packagedata']['member_package']) ==1 }checked="checked"{/if}>
+                        </div>
+                        <p style="flaot:left;line-height:28px;">会员身份</p>
+                    </div>
+                    <select id="package_type_4" {if intval($item['packagedata']['member_package']) ==1 }style="width:338px;margin-bottom:3px;"{else}style="width:338px;margin-bottom:3px;display:none;"{/if} class="form-control tpl-category-parent select2" name="member_package_level" style="float:left !important;">
+                    {loop $member_level $row}
+                    <option value="{$row['id']}" {if $item['packagedata']['member_package_level']==$row['id']}selected{/if}>{$row['levelname']}</option>
+                    {/loop}
+                    </select>
+                </div>
+
+                <!--<div class="p_3" style="width:100%;float:left;margin-bottom:6px;">-->
+                    <!--<div class="p_t_3" style="float:left;width:120px;height:28px;">-->
+                        <!--<div class="p_type_3" style="float:left;margin-right:10px;margin-top:3px;">-->
+                            <!--<input id="package_abonus_type" type="checkbox" name="abonus_package" value="1" {if intval($item['packagedata']['abonus_package']) ==1 }checked="checked"{/if}>-->
+                        <!--</div>-->
+                        <!--<p style="flaot:left;line-height:28px;">区域奖励礼包</p>-->
+                    <!--</div>-->
+
+                    <!--<select id="package_type_3" {if intval($item['packagedata']['abonus_package']) ==1 }style="width:338px;margin-bottom:3px;"{else}style="width:338px;margin-bottom:3px;display:none;"{/if} class="form-control tpl-category-parent select2" name="abonus_package_level" style="float:left !important;">-->
+                        <!--&lt;!&ndash;{loop $abonus_level $row}&ndash;&gt;-->
+                            <!--&lt;!&ndash;<option value="{$row['id']}" {if $item['packagedata']['abonus_package_level']==$row['id']}selected{/if}>{$row['levelname']}</option>&ndash;&gt;-->
+                        <!--&lt;!&ndash;{/loop}&ndash;&gt;-->
+                        <!--<option value="1" {if $item['packagedata']['abonus_package_level']==1}selected{/if}>省级</option>-->
+                        <!--<option value="2" {if $item['packagedata']['abonus_package_level']==2}selected{/if}>市级</option>-->
+                        <!--<option value="3" {if $item['packagedata']['abonus_package_level']==3}selected{/if}>区级</option>-->
+                    <!--</select>-->
+
+                <!--</div>-->
+                <div style="clear:both;"></div>
+            {else}
+                <div class='form-control-static'>{if intval($item['packagedata']['commission_package']) ==1 }分销奖励礼包{/if}{if intval($item['packagedata']['globonus_package']) ==1 }店铺奖励礼包{/if}{if intval($item['packagedata']['abonus_package']) ==1 }区域奖励礼包{/if}</div>
+            {/if}
+        </div>
+    </div>
+    <script>
+
+        {if intval($item['packagedata']['commission_package']) ==1 }
+            var commission_html ='{$item["commission_html"]}';
+            $('.p_type_1').click(function() {
+                var check = document.getElementById('package_commission_type').checked;
+                if(check == true) {
+                    $(this).parents('.p_1').append(commission_html);
+                }else{
+                    $(this).parent('.p_t_1').siblings().remove();
+                }
+            })
+        {else}
+            $('.p_type_1').click(function() {
+                var check = document.getElementById('package_commission_type').checked;
+                if(check == true) {
+                    $('#package_type_1').css('display','block');
+                }else{
+                    $('#package_type_1').css('display','none');
+                }
+            })
+        {/if}
+
+        {if intval($item['packagedata']['globonus_package']) ==1 }
+            var globonus_html ='{$item["globonus_html"]}';
+            $('.p_type_2').click(function() {
+                var check = document.getElementById('package_globonus_type').checked;
+                if(check == true) {
+                    $(this).parents('.p_2').append(globonus_html);
+                }else{
+                    $(this).parent('.p_t_2').siblings().remove();
+                }
+            })
+        {else}
+            $('.p_type_2').click(function() {
+                var check = document.getElementById('package_globonus_type').checked;
+                if(check == true) {
+                    $('#package_type_2').show();
+                }else{
+                    $('#package_type_2').hide();
+                }
+            })
+        {/if}
+
+        {if intval($item['packagedata']['abonus_package']) ==1 }
+            var abonus_html ='{$item["abonus_html"]}';
+            $('.p_type_3').click(function() {
+                var check = document.getElementById('package_abonus_type').checked;
+                if(check == true) {
+                    $(this).parents('.p_3').append(abonus_html);
+                }else{
+                    $(this).parent('.p_t_3').siblings().remove();
+                }
+            })
+        {else}
+            $('.p_type_3').click(function() {
+                var check = document.getElementById('package_abonus_type').checked;
+                if(check == true) {
+                    $('#package_type_3').show();
+                }else{
+                    $('#package_type_3').hide();
+                }
+            })
+        {/if}
+        {if intval($item['packagedata']['member_package']) ==1 }
+            var member_html ='{$item["member_html"]}';
+            $('.p_type_4').click(function() {
+                var check = document.getElementById('package_member_type').checked;
+                if(check == true) {
+                    $(this).parents('.p_4').append(member_html);
+                }else{
+                    $(this).parent('.p_t_4').siblings().remove();
+                }
+            })
+        {else}
+            $('.p_type_4').click(function() {
+                var check = document.getElementById('package_member_type').checked;
+                if(check == true) {
+                    $('#package_type_4').show();
+                }else{
+                    $('#package_type_4').hide();
+                }
+            })
+        {/if}
+
+    </script>
+
+    <div class="form-group">
+        <label class="col-lg control-label">礼包标签：</label>
+        <div class="col-sm-9 col-xs-12" style="margin-top:3px;">
+            <div style="margin-bottom:6px;height:28px;">
+                {ife 'packagegoods.goods' $item}
+                <!--<div style="float:left;width:120px;height:28px;">-->
+                <!--<div class="p_label_material" style="float:left;margin-right:10px;margin-top:3px;">-->
+                <!--<input id="is_material" type="checkbox" name="material_package_label" value="1" {if intval($item['package_label']['material_package_label']) ==1 }checked="checked"{/if}>-->
+                <!--</div>-->
+                <!--<p style="flaot:left;line-height:28px;">实物礼包</p>-->
+                <!--</div>-->
+                <div style="float:left;width:120px;height:28px;">
+                    <div class="p_label_virtual" style="float:left;margin-right:10px;margin-top:3px;">
+                        <input id="is_virtual" type="checkbox" name="virtual_package_label" value="1" {if intval($item['package_label']['virtual_package_label']) ==1 }checked="checked"{/if}>
+                    </div>
+                    <p style="flaot:left;line-height:28px;">虚拟产品</p>
+                </div>
+                <div style="float:left;width:120px;height:28px;">
+                    <div class="p_label_card" style="float:left;margin-right:10px;margin-top:3px;">
+                        <input id="is_card_recharge" type="checkbox" name="recharge_package_label" value="1" {if intval($item['package_label']['recharge_package_label']) ==1 }checked="checked"{/if}>
+                    </div>
+                    <p style="flaot:left;line-height:28px;">充值礼包</p>
+                </div>
+                <p style="color: #999 !important;">礼包标签不选择默认是实物礼包类型，另充值礼包是可以绑定附带条件（可选项）</p>
+                {else}
+                <div class='form-control-static'>
+                    {if intval($item['package_label']['material_package_label']) ==1 }
+                    实物礼包
+                    {/if}
+                    {if intval($item['package_label']['virtual_package_label']) ==1}
+                    虚拟礼包
+                    {/if}
+                    {if intval($item['package_label']['recharge_package_label']) ==1}
+                    充值礼包
+                    {/if}
+                </div>
+                {/if}
+            </div>
+
+            <!--<div id="virtual_goods" style="height:28px;margin-bottom:16px;display:none;">-->
+            <!--<p style="float:left;line-height:28px;margin-right:16px;">需填收货信息</p>-->
+            <!--<div><input type="checkbox" name="aria-invalid"></div>-->
+            <!--</div>-->
+
+            <div id="member_vip" {if intval($item['package_label']['recharge_package_label']) ==1 }style="height:28px;"{else}style="height:28px;display:none;"{/if}>
+            <div style="width:100%;margin-bottom:15px;float:left">
+                <p style="float:left;line-height:28px;margin-right:16px;">选择绑定会员卡</p>
+                <select style="width:338px;margin-bottom:3px;float:left;" class="form-control tpl-category-parent select2" name="member_card_type" style="float:left !important;">
+                    <option value="0">--请选择--</option>
+                    {loop $member_card $row}
+                    <option value="{$row['id']}" {if $item['package_member_card']['member_card_type']==$row['id']}selected{/if}>{$row['name']}</option>
+                    {/loop}
+                </select>
+                <span style="line-height:28px;color:#999;">备注:会员卡一旦绑定上架之后不能进行更换</span>
+            </div>
+
+            <div style="width:100%;margin-bottom:3px;float:left">
+
+                <div style="float:left;width:100%;">
+                    <div style="float:left;margin-right:6px;">
+                        <input style="display:block;float:left;margin-right:8px;margin-top:8px;" type="radio" name="recharge_type" value="1" {if $item['package_member_card']['recharge_type']==1}checked="checked"{/if}>
+                        <span style="display:block;float:left;margin-top:7px;margin-right:5px;">充值到会员卡金额</span>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <input style="width:150px;float:left;" class="form-control" type="text" name="recharge_money_pay" value="{$item['package_member_card']['recharge_money_pay']}">
+                    <div style="clear:both;"></div>
+                </div>
+
+                <!--<div style="float:left;width:40%;">-->
+                    <!--<div style="float:left;margin-right:6px;">-->
+                        <!--<input style="display:block;float:left;margin-right:8px;margin-top:8px;" type="radio" name="recharge_type" value="2" {if $item['package_member_card']['recharge_type']==2}checked="checked"{/if}>-->
+                        <!--<span style="display:block;float:left;margin-top:7px;margin-right:5px;">充值到会员卡积分</span>-->
+                        <!--<div style="clear:both;"></div>-->
+                    <!--</div>-->
+                    <!--<input style="width:150px;float:left;" class="form-control" type="text" name="recharge_integral_pay" value="{$item['package_member_card']['recharge_integral_pay']}">-->
+                    <!--<div style="clear:both;"></div>-->
+                <!--</div>-->
+
+                <div style="clear:both;"></div>
+            </div>
+
+            <div style="clear:both;"></div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $("#is_card_recharge").click(function() {
+        var check = document.getElementById('is_card_recharge').checked;
+        if(check == true) {
+            $('#member_vip').show();
+        }else{
+            $('#member_vip').hide();
+        }
+    })
+    // $("#is_virtual").click(function() {
+    //     var check = document.getElementById('is_virtual').checked;
+    //     if(check == true) {
+    //         $('#virtual_goods').show();
+    //     }else{
+    //         $('#virtual_goods').hide();
+    //     }
+    // })
+</script>
+
+
+    <!--礼包奖励方式-->
+    <div class="form-group">
+        <label class="col-lg control-label">礼包奖励方式：</label>
+        <div class="col-sm-9 col-xs-12" style="margin-top:3px;">
+                <div style="margin-bottom:6px;height:28px;">
+                    {ife 'packagegoods.goods' $item}
+                        <div style="float:left;width:120px;height:28px;">
+                            <div class="p_label_material" style="float:left;margin-right:10px;margin-top:3px;">
+                                <input id="commission_reward" type="checkbox" name="commission_type" value="1"  {if intval($item['commission_type']) ==1} checked {/if}>
+                            </div>
+                            <p style="flaot:left;line-height:28px;">分销奖励</p>
+                        </div>
+                        <div style="float:left;width:120px;height:28px;">
+                            <div class="p_label_virtual" style="float:left;margin-right:10px;margin-top:3px;">
+                                <input id="globonus_reward" type="checkbox" name="globonus_type" value="1" {if intval($item['globonus_type']) ==1} checked {/if}>
+                            </div>
+                            <p style="flaot:left;line-height:28px;">店铺奖励</p>
+                        </div>
+                        <div style="float:left;width:120px;height:28px;">
+                            <div class="p_label_card" style="float:left;margin-right:10px;margin-top:3px;">
+                                <input id="abonus_reward" type="checkbox" name="abonus_type" value="1" {if intval($item['abonus_type']) ==1} checked {/if}>
+                            </div>
+                            <p style="flaot:left;line-height:28px;">区域奖励</p>
+                        </div>
+                    <div style="float:left;width:120px;height:28px;">
+                        <div class="p_label_card" style="float:left;margin-right:10px;margin-top:3px;">
+                            <input id="achievement_reward" type="checkbox" name="achievement_type" value="1" {if intval($item['achievement_type']) ==1} checked {/if}>
+                        </div>
+                        <p style="flaot:left;line-height:28px;">绩效奖励</p>
+                    </div>
+                    {else}
+                        <div class='form-control-static'>
+                            {if intval($item['commission_type']) ==1}
+                                分销奖励
+                            {/if}
+                            {if intval($item['globonus_type']) ==1}
+                                店铺奖励
+                            {/if}
+                            {if intval($item['abonus_type']) ==1}
+                                区域奖励
+                            {/if}
+                            {if intval($item['achievement_type']) ==1}
+                            区域奖励
+                            {/if}
+                        </div>
+                    {/if}
+                </div>
+
+                <!--分销奖励设置-->
+
+                <div id="commission_type" {if $item['commission_type'] != 1} style="display:none;"{/if} style="margin-top:15px;">
+                    <p style="line-height:28px;margin-right:16px;">分销奖励总比例设置：</p>
+                    <input type="hidden" id="hascommission" value="1" name="hascommission"  />
+                    <input type="hidden" name="commission_type_status" value="1" id="commission_type1"   />
+
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">独立规则</label>-->
+                        <!--<div class="col-sm-9 col-xs-12">-->
+                            <!--{ife 'packagegoods.goods' $item}-->
+                                <!--<label class="checkbox-inline">-->
+                                    <!--<input type="checkbox" id="hascommission" value="1" name="hascommission" {if $item['hascommission']==1}checked{/if} />启用独立佣金比例-->
+                                <!--</label>-->
+                                <!--<span class="help-block">启用独立佣金设置，此商品拥有独自的佣金比例,不受分销商等级比例及默认设置限制</span>-->
+                            <!--{else}-->
+                                <!--<div class='form-control-static'>{if $item['hascommission']==1}启用独立佣金设置{else}不启用独立佣金设置{/if}</div>-->
+                            <!--{/if}-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div id="commission_div"  >
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-2 control-label"></label>-->
+                            <!--<div class="col-sm-10">-->
+                                <!--{ife 'packagegoods.goods' $item}-->
+                                    <!--<label for="commission_type0" class="radio-inline"><input type="radio" name="commission_type_status" value="0" id="commission_type0" {if empty($commission_type) || $commission_type == 0}checked="true"{/if} /> 统一分销佣金</label>-->
+                                    <!--<label for="commission_type1" class="radio-inline"><input type="radio" name="commission_type_status" value="1" id="commission_type1"  {if !empty($commission_type) && $commission_type == 1}checked="true"{/if} /> 详细设置分销佣金</label>-->
+                                <!--{else}-->
+                                    <!--<div class='form-control-static'>-->
+                                        <!--{if empty($commission_type) || $commission_type == 0}统一设置折扣{/if}-->
+                                        <!--{if !empty($commission_type) && $commission_type == 1}详细设置折扣{/if}-->
+                                    <!--</div>-->
+                                <!--{/if}-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <div id="commission_0"  >
+                            <!--<div class='alert alert-danger'>-->
+                                <!--如果比例为空，则使用固定规则，如果都为空则无分销佣金-->
+                            <!--</div>-->
+                            <!--{if $com_set['level']>=1}-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-sm-2 control-label">一级分销</label>-->
+                                    <!--<div class="col-sm-4 col-xs-12">-->
+                                        <!--{ife 'packagegoods.goods' $item}-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" name="commission1_rate" id="commission1_rate" class="form-control" value="{$item['commission1_rate']}" />-->
+                                            <!--<div class="input-group-addon">% 固定</div>-->
+                                            <!--<input type="text" name="commission1_pay" id="commission1_pay" class="form-control" value="{$item['commission1_pay']}" />-->
+                                            <!--<div class="input-group-addon">元</div>-->
+                                        <!--</div>-->
+                                        <!--{else}-->
+                                        <!--<div class='form-control-static'>比例: {$item['commission1_rate']}% 固定: {$item['commission1_pay']} 元</div>-->
+                                        <!--{/if}-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--{/if}-->
+                            <!--{if $com_set['level']>=2}-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-sm-2 control-label">二级分销</label>-->
+                                    <!--<div class="col-sm-4 col-xs-12">-->
+                                        <!--{ife 'packagegoods.goods' $item}-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" name="commission2_rate" id="commission2_rate" class="form-control" value="{$item['commission2_rate']}" />-->
+                                            <!--<div class="input-group-addon">% 固定</div>-->
+                                            <!--<input type="text" name="commission2_pay" id="commission2_pay" class="form-control" value="{$item['commission2_pay']}" />-->
+                                            <!--<div class="input-group-addon">元</div>-->
+                                        <!--</div>-->
+                                        <!--{else}-->
+                                        <!--<div class='form-control-static'>比例: {$item['commission2_rate']}% 固定: {$item['commission2_pay']} 元</div>-->
+                                        <!--{/if}-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--{/if}-->
+                            <!--{if $com_set['level']>=3}-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-sm-2 control-label">三级分销</label>-->
+                                    <!--<div class="col-sm-4 col-xs-12">-->
+                                        <!--{ife 'packagegoods.goods' $item}-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" name="commission3_rate" id="commission3_rate" class="form-control" value="{$item['commission3_rate']}" />-->
+                                            <!--<div class="input-group-addon">% 固定</div>-->
+                                            <!--<input type="text" name="commission3_pay" id="commission3_pay" class="form-control" value="{$item['commission3_pay']}" />-->
+                                            <!--<div class="input-group-addon">元</div>-->
+                                        <!--</div>-->
+                                        <!--{else}-->
+                                        <!--<div class='form-control-static'>比例: {$item['commission3_rate']}% 固定: {$item['commission3_pay']} 元</div>-->
+                                        <!--{/if}-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--{/if}-->
+                        </div>
+
+                        <div id="commission_1" >
+                            <div class='alert alert-danger'>
+                                填写佣金规则,如果是数字(只能是纯数字),则是以固定金额给佣金<br>
+                                例如 1  就是按照卖一件,给分销商1元<br>
+                                如果上百分号<br>
+                                例如 1% 则是以支付商品金额的百分比给佣金
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">统一设置</label>
+                                <div class="col-sm-10 col-xs-10">
+                                    <select id="commission_level1" class="form-control" style="width:200px;display: inline-block">
+                                        <option value="">选择等级</option>
+                                        {loop $commission_level1 $level}
+                                            {if $level['key'] == 'default'}
+                                                <option value="{$level['key']}">{$level['levelname']}</option>
+                                            {else}
+                                                <option value="{$level['id']}">{$level['levelname']}</option>
+                                            {/if}
+                                        {/loop}
+                                    </select>
+                                    <select id="commission_level2" class="form-control" style="width:200px;display: inline-block">
+                                        <option value="">选择佣金级别</option>
+                                        {php for($i=0;$i<$_W['shopset']['commission']['level'];$i++):}
+                                        <option value="{$i}">{php echo $i+1}级佣金</option>
+                                        {php endfor;}
+                                    </select>
+                                    <input id="commission_level3" class="form-control" style="width:100px;display: inline-block" placeholder="佣金设置">
+                                    <a class="btn btn-danger" onclick="commission_change_all()">设置</a>
+                                </div>
+                            </div>
+                            <div id='tbcommission' style="padding-left:15px;" >
+                                <div id="commission" style="padding:0;">{if $item['hasoption']==1}{$commission_html}{/if}</div>
+                                <div id="commission_default" style="padding:0;overflow-x: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--店铺奖励设置-->
+                <div id="globonus_type" {if empty($item['globonus_type'])}style="display:none;"{/if}>
+                    <div style="height:28px;margin-bottom:16px;">
+                        <p style="float:left;line-height:28px;margin-right:16px;">店铺奖励总比例设置：</p>
+                    </div>
+                    <div style="height:28px;margin-bottom: 18px;">
+                        <div style="width:100%;height:28px;margin-bottom:3px;float:left">
+                            {loop $globonus_level $index $globonuslevel}
+                                <div style="float:left;width:20%;">
+                                    <p style="float:left;margin-right:6px;line-height:32px;">{$globonuslevel['levelname']}</p>
+                                    <input onkeyup="clearNoNum(this)" style="width:60px;float:left;" class="form-control" type="text" name="globonus_level_reward[{$globonuslevel['id']}]" value="{$item['globonus'][$globonuslevel['id']]}">
+                                    <!--<p style="float:left;line-height:32px;color:#efefef;">（0~1）</p>-->
+                                    <div style="clear:both;"></div>
+                                </div>
+                            {/loop}
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+<!--绩效奖励设置-->
+<div id="achievement_type" {if empty($item['achievement_type'])}style="display:none;"{/if}>
+<div style="height:28px;margin-bottom:16px;">
+    <p style="float:left;line-height:28px;margin-right:16px;">绩效奖励总比例设置：</p>
+</div>
+<div style="height:28px;margin-bottom: 18px;">
+    <div style="width:100%;height:28px;margin-bottom:3px;float:left">
+        <div style="float:left;width:20%;">
+            <p style="float:left;margin-right:6px;line-height:32px;">奖金比例</p>
+            <input onkeyup="clearNoNum(this)" style="width:60px;float:left;" class="form-control" type="text" name="achievement_proportion" value="{$item['achievement_proportion']}">
+            <!--<p style="float:left;line-height:32px;color:#efefef;">（0~1）</p>-->
+            <div style="clear:both;"></div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+</div>
+
+<!--区域奖励设置-->
+<div id="abonus_type" {if empty($item['abonus_type'])} style="display:none;"{/if}>
+<div style="height:28px;margin-bottom:16px;">
+    <p style="float:left;line-height:28px;margin-right:16px;">区域奖励总比例设置：</p>
+</div>
+<dl class="three_table" style="display: block;margin-block-start: 1.5em;">
+    <table width="100%" class="WSY_table" id="WSY_t2">
+        <thead class="WSY_table_header" style="background-color: #44abf7;">
+        <tr>
+            <th nowrap="nowrap">等级</th>
+            <th nowrap="nowrap">省级比例</th>
+            <th nowrap="nowrap">市级比例</th>
+            <th nowrap="nowrap">区级比例</th>
+        </tr>
+        </thead>
+        <tbody>
+        {loop $abonus_level $index1 $abonuslevel}
+            <tr>
+                <td>{$abonuslevel['levelname']}</td>
+                <input type="hidden" name="abonus_level[]"  value="{$abonuslevel['id']}">
+
+                <td>
+                    <input onkeyup="clearNoNum(this)" type="text" name='abonus_level_reward_province[]' {if $item['abonus'][$index1]['level'] == $abonuslevel['id']} value="{$item['abonus'][$index1]['province']}"{/if}>
+                </td>
+                <td>
+                    <input onkeyup="clearNoNum(this)" type="text" name='abonus_level_reward_city[]' {if $item['abonus'][$index1]['level'] == $abonuslevel['id']} value="{$item['abonus'][$index1]['city']}"{/if}>
+                </td>
+                <td>
+                    <input onkeyup="clearNoNum(this)" type="text" name='abonus_level_reward_area[]' {if $item['abonus'][$index1]['level'] == $abonuslevel['id']} value="{$item['abonus'][$index1]['area']}"{/if}>
+                </td>
+            </tr>
+        {/loop}
+        </tbody>
+    </table>
+</dl>
+</div>
+        </div>
+    </div>
+
+
+<script language="javascript">
+    $(function() {
+        $("#hascommission").click(function() {
+            var obj = $(this);
+            if (obj.get(0).checked) {
+                $("#commission_div").show();
+            } else {
+                $("#commission_div").hide();
+            }
+        });
+    })
+</script>
+<script>
+    $(function () {
+        $("label[for='commission_type0']").click(function () {
+            $("#commission_1").hide();
+            $("#commission_0").show();
+        });
+        $("label[for='commission_type1']").click(function () {
+            commission_change();
+            $("#commission_0").hide();
+            $("#commission_1").show();
+        });
+    });
+    function commission_change() {
+        var html =
+                '<table class="table table-bordered table-condensed" {if count($commission_level) >5} style="width: {php echo count($commission_level)* 205}px;" {/if} >' +
+                '<thead>' +
+                    '<tr class="active">' +
+                    '{loop $commission_level $level}' +
+                        '<th>' +
+                            '<div class="">' +
+                                 '<div style="padding-bottom:10px;text-align:center;">{$level["levelname"]}</div>' +
+                            '</div>' +
+                        '</th>' +
+                    '{/loop}' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                    '<tr>' +
+                        '{loop $commission_level $level}' +
+                            '{if $level["key"]=="default"}' +
+                                '<td>' +
+                                    '{php for ($c_i = 0; $c_i < $_W["shopset"]["commission"]["level"]; $c_i++): }' +
+                                        '<input name="commission_level_{$level["key"]}_default[]" type="text" class="form-control commission_{$level["key"]} commission_{$level["key"]}_default" value="{php echo $commission[$level["key"]]["option0"][$c_i ];}" style="display:inline;width: {php echo (96 / $_W["shopset"]["commission"]["level"])}%;" placeholder="{php echo $c_i+1}级"> ' +
+                                    '{php endfor;}' +
+                                '</td>' +
+                            '{else}' +
+                                '<td>' +
+                                    '{php for ($c_i = 0; $c_i < $_W["shopset"]["commission"]["level"]; $c_i++): }' +
+                                         '<input name="commission_level_{$level["id"]}_default[]" type="text" class="form-control commission_level{$level["id"]} commission_{$level["key"]}_default" value="{php echo $commission["level".$level["id"]]["option0"][$c_i ];}" style="display:inline;width: {php echo (96 / $_W["shopset"]["commission"]["level"])}%;" placeholder="{php echo $c_i+1}级"> ' +
+                                     '{php endfor;}' +
+                                '</td>' +
+                            '{/if}' +
+                        '{/loop}' +
+                    '</tr>' +
+                '</tbody>' +
+                '</table>';
+        if ($("#commission").html()=='')
+        {
+            $("#commission_default").html(html);
+            $("#commission_default").show();
+        }
+        else
+        {
+            $("#commission_default").html('');
+            $("#commission_default").show();
+        }
+    }
+    commission_change();
+
+    function commission_change_all() {
+        var commission_level1 = $("#commission_level1").val();
+        var commission_level2 = $("#commission_level2").val();
+        var commission_level3 = $("#commission_level3").val();
+
+        if (commission_level1=='')
+        {
+            tip.msgbox.err('请选择分销商等级');
+            return false;
+        }
+        if (commission_level2=='')
+        {
+            tip.msgbox.err('请选择佣金等级');
+            return false;
+        }
+        if (commission_level3=='')
+        {
+            tip.msgbox.err('请填写佣金比例');
+            return false;
+        }
+
+        if (commission_level1=='default')
+        {
+            $(".commission_default").each(function (key,val) {
+                if(key%{$_W['shopset']['commission']['level']} == commission_level2)
+                {
+                    $(this).val(commission_level3);
+                }
+            });
+        }
+        else
+        {
+            $(".commission_level"+commission_level1).each(function (key,val) {
+                if(key%{$_W['shopset']['commission']['level']} == commission_level2)
+                {
+                    $(this).val(commission_level3);
+                }
+            });
+        }
+    }
+</script>
+
+
+<!--礼包奖励方式设置js-->
+<script>
+        $("#commission_reward").click(function() {
+            var check = document.getElementById('commission_reward').checked;
+            if(check == true) {
+                $('#commission_type').show();
+            }else{
+                $('#commission_type').hide();
+            }
+        })
+        $("#globonus_reward").click(function() {
+            var check = document.getElementById('globonus_reward').checked;
+            if(check == true) {
+                $('#globonus_type').show();
+            }else{
+                $('#globonus_type').hide();
+            }
+        })
+        $("#abonus_reward").click(function() {
+            var check = document.getElementById('abonus_reward').checked;
+            if(check == true) {
+                $('#abonus_type').show();
+            }else{
+                $('#abonus_type').hide();
+            }
+        })
+        $("#achievement_reward").click(function() {
+            var check = document.getElementById('achievement_reward').checked;
+            if(check == true) {
+                $('#achievement_type').show();
+            }else{
+                $('#achievement_type').hide();
+            }
+        })
+</script>
+
+
+
+
+
+<div class="form-group">
+    <label class="col-lg control-label must">礼包图片</label>
+    <div class="col-sm-9 col-xs-12 gimgs">
+        {ife 'packagegoods.goods' $item}
+        {php echo tpl_form_field_multi_image2('thumbs',$piclist)}
+        <span class="help-block image-block" style="display: block;">第一张为缩略图，建议为正方型图片，其他为详情页面图片，尺寸建议宽度为640，并保持图片大小一致</span>
+        <span class="help-block">您可以拖动图片改变其显示顺序 </span>
+        {else}
+        {loop $piclist $p}
+        <a href='{php echo tomedia($p)}' target='_blank'>
+            <img src="{php echo tomedia($p)}" style='height:100px;border:1px solid #ccc;padding:1px;float:left;margin-right:5px;' />
+        </a>
+        {/loop}
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">礼包价</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'packagegoods.goods' $item}
+        <div class="input-group fixmore-input-group">
+            <input type="text" name="packageprice" class="form-control" value="{$item['packageprice']}" />
+            <span class="input-group-addon">元 市场价</span>
+            <input type="text" name="price" class="form-control" value="{$item['price']}" />
+            <span class="input-group-addon">元</span>
+        </div>
+        <span class='help-block'>尽量填写完整，有助于于礼包销售的数据分析</span>
+        {else}
+        <div class='form-control-static'>礼包价：{$item['packageprice']} 元， 市场价：{$item['price']} 元 </div>
+        {/if}
+    </div>
+</div>
+<div class="form-group  goodstype goodstype0">
+    <label class="col-lg control-label">数量</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'packagegoods.goods' $item}
+            <div class="input-group fixsingle-input-group">
+                <input type='text' class='form-control' name='goodsnum' value="{if $item['goodsnum']}{$item['goodsnum']}{else}1{/if}" />
+            </div>
+            <span class="help-block">礼包自定义数量，默认是1</span>
+        {else}
+            <div class='form-control-static'>{$item['goodsnum']}</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group  goodstype goodstype0">
+    <label class="col-lg control-label">单位</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'packagegoods.goods' $item}
+        <div class="input-group fixsingle-input-group">
+            <input type='text' class='form-control' name='units' value="{if $item['units']}{$item['units']}{else}件{/if}" />
+        </div>
+        <span class="help-block">礼包自定义单位，如果不填写默认是【件】</span>
+        {else}
+        <div class='form-control-static'>{$item['units']}</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">已出售数</label>
+    <div class="col-sm-6 col-xs-12">
+        {ife 'packagegoods.goods' $item}
+        <div class="input-group fixsingle-input-group">
+            <input type="text" name="sales" id="sales" class="form-control" value="{$item['sales']}" />
+            <span class="input-group-addon">件</span>
+        </div>
+        <span class="help-block">物品虚拟出售数，会员下单此数据就增加, 无论是否支付</span>
+        {else}
+        <div class='form-control-static'>{$item['sales']} 件</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group dispatch_info">
+    <label class="col-lg control-label">运费设置</label>
+    <div class="col-sm-6 col-xs-12">
+        {ife 'packagegoods.goods' $item}
+        <div class="input-group fixsingle-input-group">
+                <span class='input-group-addon' style='border:none;display: none;'>
+                    <label class="radio-inline" style='margin-top:-7px;' >
+                        <input type="radio" name="dispatchtype" value="0" {if empty($item['dispatchtype'])}checked="true"{/if}   /> 运费模板
+                    </label>
+                </span>
+            <select class="form-control tpl-category-parent select2" id="dispatchid" name="dispatchid" style="display: none;">
+                <option value="0">默认模板</option>
+                {loop $dispatch_data $dispatch_item}
+                <option value="{$dispatch_item['id']}" {if $item['dispatchid'] == $dispatch_item['id']}selected="true"{/if}>{$dispatch_item['dispatchname']}</option>
+                {/loop}
+            </select>
+                <span class='input-group-addon' style='border:none;display: none;'><label class="radio-inline"  style='margin-top:-7px;' >
+                    <input type="radio"name="dispatchtype" value="1" {if $item['dispatchtype'] == 1}checked="true"{/if}  /> 统一邮费</label>
+                </span>
+
+            <input type="text" name="freight" id="dispatchprice" class="form-control" value="{$item['freight']}" />
+            <span class="input-group-addon">元</span>
+        </div>
+        {else}
+        <div class='form-control-static'>{$item['freight']} 元</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">状态</label>
+    <div class="col-xs-12 col-sm-8">
+        <div class="input-group fixsingle-input-group">
+            {ife 'packagegoods.goods' $item}
+            <label class="radio radio-inline">
+                <input type="radio" name="status" value="1" {if intval($item['status']) ==1 }checked="checked"{/if}> 上架
+            </label>
+            <label class="radio radio-inline">
+                <input type="radio" name="status" value="0" {if intval($item['status']) ==0}checked="checked"{/if}> 下架
+            </label>
+            {else}
+            <div class='form-control-static'>{if intval($item['status']) ==1 }上架{else}下架{/if}</div>
+            {/if}
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">礼包首页显示</label>
+    <div class="col-xs-12 col-sm-8">
+        <div class="input-group fixsingle-input-group">
+            {ife 'packagegoods.goods' $item}
+            <label class="radio radio-inline">
+                <input type="radio" name="isindex" value="1" {if intval($item['isindex']) ==1 }checked="checked"{/if}> 是
+            </label>
+            <label class="radio radio-inline">
+                <input type="radio" name="isindex" value="0" {if intval($item['isindex']) ==0}checked="checked"{/if}> 否
+            </label>
+            {else}
+            <div class='form-control-static'>{if intval($item['isindex']) ==1 }是{else}否{/if}</div>
+            {/if}
+        </div>
+    </div>
+</div>
+
+{if !empty($id)}
+<div class="form-group" style="display:none;">
+    <label class="col-lg control-label">添加日期</label>
+    <div class="col-xs-12 col-sm-8">
+        <p class="form-control-static">{php echo date('Y-m-d H:i', $item['createtime']);}</p>
+    </div>
+</div>
+{/if}
+<!--<script src="../addons/ewei_shopv2/plugin/packagegoods/static/js/spec.js"></script>-->
+<script language="javascript">
+    require(['jquery.ui'],function(){
+        $('.multi-img-details').sortable();
+    });
+
+    require(['bootstrap'], function () {
+        $('#myTab a').click(function (e) {
+            $('#tab').val( $(this).attr('href'));
+            e.preventDefault();
+            $(this).tab('show');
+            $(this).tab('show');
+        })
+    });
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        $("input[name='single']").click(function(){
+            if(this.value== true){
+                $("#single").show()
+            }else{
+                $("#single").hide();
+            }
+        });
+
+        //添加拼团价格区间
+        $( '#add_ladder' ).click(function(){
+            if($( '#ladder_box' ).children().length>10){
+                alert('最多添加10个');return;
+            }
+            $( '#ladder_box' ).append("<div class=\"input-group fixmore-input-group\" style=\"margin-top: 10px;\"><input type='hidden' name='ladder_id[]' value=''>\n" +
+                    "            <input type=\"text\" name=\"ladder_num[]\" class=\"form-control\" value=\"\">\n" +
+                    "            <span class=\"input-group-addon\">人团</span>\n" +
+                    "            <input type=\"text\" name=\"ladder_price[]\" class=\"form-control\" value=\"\">\n" +
+                    "            <span class=\"input-group-addon\">元/件</span>\n" +
+                    "            <span class=\"input-group-addon\"><a href=\"javascript:;\" onclick='del_ladder(this)' title=\"删除\"><i class=\"fa fa-times\"></i></a></span>\n" +
+                    "        </div>");
+        });
+
+        //开启拼团
+        $( '#ladder' ).click(function(){
+            if( $( this ).is(':checked') ){
+                $( '#ladder_data' ).css('display','block');
+                $('#groupnum').css("display","none");
+            }else{
+                $( '#ladder_data' ).css( 'display' , 'none' );
+                $('#groupnum').css("display","block");
+            }
+        });
+
+
+    });
+    //删除拼团价格区间
+    function del_ladder( self ) {
+        $( self ).parent().parent().remove();
+    }
+
+
+    function commissionArray() {
+        if(!$('#hasoption').get(0).checked) {
+            return false;
+        }
+        var specs = [];
+        $(".spec_item").each(function (i) {
+            var _this = $(this);
+
+            var spec = {
+                id: _this.find(".spec_id").val(),
+                title: _this.find(".spec_title").val()
+            };
+
+            var items = [];
+            _this.find(".spec_item_item").each(function () {
+                var __this = $(this);
+                var item = {
+                    id: __this.find(".spec_item_id").val(),
+                    title: __this.find(".spec_item_title").val(),
+                    virtual: __this.find(".spec_item_virtual").val(),
+                    show: __this.find(".spec_item_show").get(0).checked ? "1" : "0"
+                }
+                items.push(item);
+            });
+            spec.items = items;
+            specs.push(spec);
+        });
+        specs.sort(function (x, y) {
+            if (x.items.length > y.items.length) {
+                return 1;
+            }
+            if (x.items.length < y.items.length) {
+                return -1;
+            }
+        });
+
+        var len = specs.length;
+        var newlen = 1;
+        var h = new Array(len);
+        var rowspans = new Array(len);
+        for (var i = 0; i < len; i++) {
+            var itemlen = specs[i].items.length;
+            if (itemlen <= 0) {
+                itemlen = 1
+            }
+            newlen *= itemlen;
+            h[i] = new Array(newlen);
+            for (var j = 0; j < newlen; j++) {
+                h[i][j] = new Array();
+            }
+            var l = specs[i].items.length;
+            rowspans[i] = 1;
+            for (j = i + 1; j < len; j++) {
+                rowspans[i] *= specs[j].items.length;
+            }
+        }
+
+        for (var m = 0; m < len; m++) {
+            var k = 0, kid = 0, n = 0;
+            for (var j = 0; j < newlen; j++) {
+                var rowspan = rowspans[m];
+                if (j % rowspan == 0) {
+                    h[m][j] = {
+                        title: specs[m].items[kid].title,
+                        virtual: specs[m].items[kid].virtual,
+                        id: specs[m].items[kid].id
+                    };
+                }
+                else {
+                    h[m][j] = {
+                        title: specs[m].items[kid].title,
+                        virtual: specs[m].items[kid].virtual,
+                        id: specs[m].items[kid].id
+                    };
+                }
+                n++;
+                if (n == rowspan) {
+                    kid++;
+                    if (kid > specs[m].items.length - 1) {
+                        kid = 0;
+                    }
+                    n = 0;
+                }
+            }
+        }
+
+        var commission = {};
+        var commission_level = {php echo json_encode($commission_level)};
+        for (var i = 0; i < newlen; i++) {
+            var ids = [];
+            for (var j = 0; j < len; j++) {
+                ids.push(h[j][i].id);
+            }
+            ids = ids.join('_');
+            $.each(commission_level,function (key,val) {
+                if(val.key == 'default') {
+                    var kkk = "commission_level_"+val.key+"_"+ids;
+                    commission[kkk] = {};
+                    $("input[data-name=commission_level_"+val.key+"_"+ids+"]").each(function (k,v) {
+                        commission[kkk][k] = $(v).val();
+                    });
+                }else {
+                    var kkk = "commission_level_"+val.id+"_"+ids;
+                    commission[kkk] = {};
+                    $("input[data-name=commission_level_"+val.id+"_"+ids+"]").each(function (k,v) {
+                        commission[kkk][k] = $(v).val();
+                    });
+                    var kkk = "commission_level_"+val.id+"_"+ids;
+                    commission[kkk] = {};
+                    $("input[data-name=commission_level_"+val.id+"_"+ids+"]").each(function (k,v) {
+                        commission[kkk][k] = $(v).val();
+                    });
+                }
+            })
+        }
+
+        var commission_id = new Array();
+        $('.commission_id').each(function (index,item) {
+            commission_id.push($(item).val());
+        });
+
+        var commission_ids = new Array();
+        $('.commission_ids').each(function (index,item) {
+            commission_ids.push($(item).val());
+        });
+
+        var commission_title = new Array();
+        $('.commission_title').each(function (index,item) {
+            commission_title.push($(item).val());
+        });
+
+        var commission_virtual = new Array();
+        $('.commission_virtual').each(function (index,item) {
+            commission_virtual.push($(item).val());
+        });
+
+
+
+        var options = {
+            commission : commission,
+            commission_id : commission_id,
+            commission_ids : commission_ids,
+            commission_title : commission_title,
+            commission_virtual : commission_virtual
+        };
+        $("input[name='commissionArray']").val(JSON.stringify(options));
+    }
+
+    //控制只能输入小数点后2位
+    function clearNoNum(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+        if (obj.value.indexOf(".") < 0 && obj.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+            obj.value = parseFloat(obj.value);
+        }
+    }
+</script>

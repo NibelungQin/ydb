@@ -1,0 +1,24 @@
+<div class="fui-navbar" style="z-index: 10;">
+	<a href="{php echo mobileUrl('packagegoods')}" class="external nav-item {if $_GPC['r']=='packagegoods'}active{/if}">
+		<span class="icon icon-home"></span>
+		<span class="label">礼包首页</span>
+	</a>
+	<!--<a href="{php echo mobileUrl('packagegoods/category')}" class="external nav-item {if $_GPC['r']=='packagegoods.category'}active{/if}">-->
+		<!--<span class="icon icon-list"></span>-->
+		<!--<span class="label">礼包列表</span>-->
+	<!--</a>-->
+	<a href="{php echo mobileUrl('packagegoods/orders')}" class="external nav-item {if $_GPC['r']=='packagegoods.orders'}active{/if}">
+		<span class="icon icon-order"></span>
+		<span class="label">我的订单</span>
+	</a>
+	<a href="{php echo mobileUrl('packagegoods/log')}" class="external nav-item {if $_GPC['r']=='packagegoods.log'}active{/if}">
+		<span class="icon icon-list"></span>
+		<span class="label">奖励明细</span>
+	</a>
+	<!--<a href="{php echo mobileUrl('packagegoods/team')}" class="external nav-item {if $_GPC['r']=='packagegoods.team'}active{/if}">-->
+		<!--<span class="icon icon-group"></span>-->
+		<!--<span class="label">我的礼包</span>-->
+	<!--</a>-->
+</div>
+
+

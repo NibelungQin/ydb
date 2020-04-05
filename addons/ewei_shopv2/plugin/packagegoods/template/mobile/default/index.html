@@ -1,0 +1,148 @@
+{template '_header'}
+{php $this->followBar()}
+<style>
+	.lynn_index_list_info > span {
+		margin-left: 0.5rem !important;
+	}
+	.lynn_index_list_info .price {
+		margin-left: 0.5rem !important;
+	}
+</style>
+<link rel="stylesheet" href="../addons/ewei_shopv2/plugin/packagegoods/template/mobile/default/css/style.css?v=2018531" />
+<div class='fui-page creditshop-index-page'>
+	{if is_h5app()}
+		<div class="fui-header">
+			<div class="fui-header-left">
+				<a class="back"></a>
+			</div>
+			<div class="title">{php echo m('plugin')->getName('packagegoods')}</div>
+			<div class="fui-header-right"></div>
+		</div>
+	{/if}
+	<div class='fui-content navbar'>
+		<!--banner图片-->
+		<div class='fui-swipe' data-transition="500" data-gap="1">
+		    <div class='fui-swipe-wrapper'>
+				{loop $advs $adv}
+					<a class='fui-swipe-item' href="{if !empty($adv['link'])}{$adv['link']}{else}javascript:;{/if}">
+						<img src="{php echo tomedia($adv['thumb'])}" alt="{$adv['advname']}" onerror="this.src='../addons/ewei_shopv2/static/images/nopic100.jpg'"/>
+					</a>
+				{/loop}
+		    </div>
+		    <div class='fui-swipe-page'></div>
+		</div>
+
+		<!--礼包类型-->
+		<!--{if count($packagegoods_type)>0}-->
+			<!--<div class="lynn_index_menu row">-->
+				<!--{loop $packagegoods_type $cate}-->
+					<!--<a href="{php echo mobileUrl('packagegoods/packagegoods_type', array('category'=>$cate['id']))}">-->
+						<!--<img src="{$cate['thumb']}" alt="{$cate['name']}" onerror="this.src='../addons/ewei_shopv2/static/images/nopic100.jpg'">-->
+						<!--<p>{$cate['name']}</p>-->
+					<!--</a>-->
+				<!--{/loop}-->
+			<!--</div>-->
+		<!--{/if}-->
+
+		<div class="lynn_item" style="height:0.35rem !important;"></div>
+		{if count($recgoods)>0}
+			<ul class="lynn_index_list_ul row">
+				{loop $recgoods $item}
+					<li class="lynn_index_list_li fui-list goods-list">
+						<a style="width:3.5rem;height:3.5rem;" href="{php echo mobileUrl('packagegoods/goods', array('id'=>$item['id']))}" class="external lynn_index_list_a fui-list-media">
+							<img data-lazy="{php echo tomedia($item['thumb'])}" alt="{$item['title']}" onerror="this.src='../addons/ewei_shopv2/static/images/nopic100.jpg'">
+						</a>
+						<div style="height:3.5rem !important;" class="lynn_index_list_info fui-list-inner" onclick="window.location.href='{php echo mobileUrl('packagegoods/goods', array('id'=>$item['id']))}';">
+
+							<h3 style="margin-left:0.5rem;height: 1.5rem;line-height:1.5rem !important;">{$item['title']}</h3>
+							<style>
+								.package_label {
+									min-width: 2.25rem;
+									text-align: center;
+									padding: 0 0.3rem;
+									box-shadow: 0 0 0.5rem 0 rgba(255, 221, 221, 0.8);
+									margin: 0 0.25rem;
+									font-size: 0.55rem;
+									font-weight: bold;
+									line-height: 0.85rem;
+									color: #ff6000;
+									border-radius: 0.1rem;
+									display: inline-block;
+									background-image: -webkit-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									background-image: -moz-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									background-image: -ms-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									background-image: -o-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									-webkit-background-clip: text;
+									-webkit-text-fill-color: transparent;
+								}
+								.package_style {
+									min-width: 2.25rem;
+									text-align: center;
+									padding: 0 0.3rem;
+									box-shadow: 0 0 0.5rem 0 rgba(255, 221, 221, 0.8);
+									margin: 0 0.25rem;
+									font-size: 0.55rem;
+									font-weight: bold;
+									line-height: 0.85rem;
+									color: #ff6000;
+									border-radius: 0.1rem;
+									display: inline-block;
+									background-image: -webkit-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									background-image: -moz-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									background-image: -ms-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									background-image: -o-gradient(linear, 0 0, right 0, from(#ff6000), to(#ff5555));
+									-webkit-background-clip: text;
+									-webkit-text-fill-color: transparent;
+								}
+							</style>
+							{if $item['package_label']}
+								<div>
+									<!--{if $item['package_label']['material_package_label'] == 1}-->
+										<!--<span class="package_label">实物</span>-->
+									<!--{/if}-->
+									{if $item['package_label']['virtual_package_label'] == 1}
+										<!--<span class="package_label">虚拟</span>-->
+									{/if}
+									{if $item['package_label']['recharge_package_label'] == 1}
+										<!--<span class="package_label">充值</span>-->
+									{/if}
+									<!--<div style="clear:both;"></div>-->
+								</div>
+							{/if}
+							{if $item['packagedata']}
+								<!--<div>-->
+									<!--{if $item['packagedata']['commission_package'] == 1}-->
+										<!--<span class="package_style">分销礼包</span>-->
+									<!--{/if}-->
+									<!--{if $item['packagedata']['globonus_package'] == 1}-->
+										<!--<span class="package_style">店铺礼包</span>-->
+									<!--{/if}-->
+									<!--{if $item['packagedata']['abonus_package'] == 1}-->
+										<!--<span class="package_style">区域礼包</span>-->
+									<!--{/if}-->
+									<!--<div style="clear:both;"></div>-->
+								<!--</div>-->
+							{/if}
+							<span style="height: 1.4rem ; line-height: 1.4rem ;text-decoration:line-through;">
+								原价：¥{$item['price']}
+							</span>
+							<div class="price">
+								<span>{$item['packageprice']}元</span>
+								<a href="{php echo mobileUrl('packagegoods/goods', array('id'=>$item['id'],'mid'=>$_W['mid']))}" class="external lynn_index_list_team_a">购买礼包 </a>
+							</div>
+						</div>
+					</li>
+				{/loop}
+			</ul>
+		{else}
+			<div class="fui-message fui-message-popup in">
+				<div class="icon ">
+					<i class="icon icon-information"></i>
+				</div>
+				<div class="content">暂无任何礼包</div>
+			</div>
+		{/if}
+	</div>
+</div>
+{php $this->footerMenus()}
+{template '_footer'}

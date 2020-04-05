@@ -1,0 +1,222 @@
+{template '_header'}
+<style>
+    tbody tr td{
+        position: relative;
+    }
+    tbody tr  .icow-weibiaoti--{
+        visibility: hidden;
+        display: inline-block;
+        color: #fff;
+        height:18px;
+        width:18px;
+        background: #e0e0e0;
+        text-align: center;
+        line-height: 18px;
+        vertical-align: middle;
+    }
+    tbody tr:hover .icow-weibiaoti--{
+        visibility: visible;
+    }
+    tbody tr  .icow-weibiaoti--.hidden{
+        visibility: hidden !important;
+    }
+    .full .icow-weibiaoti--{
+        margin-left: 10px;
+    }
+    .full>span{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        vertical-align: middle;
+        align-items: center;
+    }
+    tbody tr .label{
+        margin: 5px 0;
+    }
+    .goods_attribute a{
+        cursor: pointer;
+    }
+</style>
+
+<div class="page-header">
+    当前位置：<span class="text-primary">广告套餐管理</span>
+</div>
+
+<div class="page-content">
+
+    <form action="./merchant.php" method="get" class="form-horizontal form-search" role="form">
+        <input type="hidden" name="c" value="site" />
+        <input type="hidden" name="a" value="entry" />
+        <input type="hidden" name="m" value="ewei_shopv2" />
+        <input type="hidden" name="do" value="web" />
+        <input type="hidden" name="r"  value="advertisement" />
+
+        <div class="page-toolbar">
+            <div class="input-group col-sm-6 pull-right">
+                <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="ID/广告套餐名称">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"> 搜索</button>
+                </span>
+            </div>
+        </div>
+    </form>
+
+    {if count($list)>0}
+    <table class="table table-hover table-responsive">
+        <thead class="navbar-inner">
+        <tr>
+            <th style="width:25px;"></th>
+            <th style="width:80px;text-align:center;">ID</th>
+            <th style="width:80px;">广告标题</th>
+            <th style="width:200px;">&nbsp;</th>
+            <th style="width:80px;text-align:center;">广告价</th>
+            <th style="width:150px;text-align:center;">已选数量（单位：/套）</th>
+            <th style="width:120px;text-align:center;">状态</th>
+            <th style="width: 120px;">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+            {loop $list $item}
+                <tr>
+                    <td>
+                        <input type='checkbox'  value="{$item['o_id']}"/>
+                    </td>
+                    <td style='text-align:center;'>
+                        {$item['o_id']}
+                    </td>
+                    <td>
+                        <img src="{php echo tomedia($item['goods']['thumb'])}" style="width:72px;height:72px;padding:1px;border:1px solid #efefef;margin: 7px 0" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'" />
+                    </td>
+                    <td class='full' >
+                                <span>
+                                    <span>{$item['goods']['title']}</span>
+                                </span>
+                    </td>
+                    <td>&yen;
+                        {$item['goods']['groupsprice']}
+                    </td>
+                    <td style="text-align:center;">
+                        {$item['adv_num']}
+                    </td>
+
+
+                    <td  style="overflow:visible;text-align:center;">
+                        <span class='label {if $item[goods]['status']==1}label-primary{else}label-default{/if}'>
+                        {if $item[goods]['status']==1}上架{else}下架{/if}
+                        </span>
+                    </td>
+
+                    <td  style="overflow:visible;position:relative">
+                        {ifp 'advertisement.edit|advertisement.view'}
+                            {if $item['adv_num'] > 0}
+                                <a  class='btn btn-op btn-operation' href="{php echo webUrl('advertisement/selected_adv_edit', array('id' => $item['o_id'],'page'=>$page))}" >
+                                     <span data-toggle="tooltip" data-placement="top" title="" data-original-title="绑定商品">
+                                        <i class="icow icow-bianji2"></i>
+                                     </span>
+                                </a>
+                            {/if}
+                        {/if}
+                    </td>
+                </tr>
+            {/loop}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td>
+                <!--<input type="checkbox">-->
+            </td>
+            <td colspan="4">
+                <div class="btn-group">
+                    <!--{ifp 'advertisement.view'}-->
+                    <!--<button class="btn btn-default btn-sm  btn-operation" type="button" data-toggle='batch-remove' data-confirm="确认需要选取此广告套餐?" data-href="{php echo webUrl('advertisement/selection_adv')}">-->
+                        <!--<i class='icow icow-shanchu1'></i> 选取套餐-->
+                    <!--</button>-->
+                    <!--{/if}-->
+                </div>
+            </td>
+            <td colspan="5" style="text-align: right">
+                {$pager}
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+    {else}
+    <div class='panel panel-default'>
+        <div class='panel-body' style='text-align: center;padding:30px;'>
+            暂时没有任何广告套餐!
+        </div>
+    </div>
+    {/if}
+</div>
+<script>
+    $(document).on("click", '[data-toggle="ajaxEdit2"]',
+            function (e) {
+                var _this = $(this)
+                $(this).addClass('hidden')
+                var obj = $(this).parent().find('a'),
+                        url = obj.data('href') || obj.attr('href'),
+                        data = obj.data('set') || {},
+                        html = $.trim(obj.text()),
+                        required = obj.data('required') || true,
+                        edit = obj.data('edit') || 'input';
+                var oldval = $.trim($(this).text());
+                e.preventDefault();
+
+                submit = function () {
+                    e.preventDefault();
+                    var val = $.trim(input.val());
+                    if (required) {
+                        if (val == '') {
+                            tip.msgbox.err(tip.lang.empty);
+                            return;
+                        }
+                    }
+                    if (val == html) {
+                        input.remove(), obj.html(val).show();
+                        //obj.closest('tr').find('.icow').css({visibility:'visible'})
+                        return;
+                    }
+                    if (url) {
+                        $.post(url, {
+                            value: val
+                        }, function (ret) {
+
+                            ret = eval("(" + ret + ")");
+                            if (ret.status == 1) {
+                                obj.html(val).show();
+
+                            } else {
+                                tip.msgbox.err(ret.result.message, ret.result.url);
+                            }
+                            input.remove();
+                        }).fail(function () {
+                            input.remove(), tip.msgbox.err(tip.lang.exception);
+                        });
+                    } else {
+                        input.remove();
+                        obj.html(val).show();
+                    }
+                    obj.trigger('valueChange', [val, oldval]);
+                },
+                        obj.hide().html('<i class="fa fa-spinner fa-spin"></i>');
+                var input = $('<input type="text" class="form-control input-sm" style="width: 80%;display: inline;" />');
+                if (edit == 'textarea') {
+                    input = $('<textarea type="text" class="form-control" style="resize:none;" rows=3 width="100%" ></textarea>');
+                }
+                obj.after(input);
+
+                input.val(html).select().blur(function () {
+                    submit(input);
+                    _this.removeClass('hidden')
+
+                }).keypress(function (e) {
+                    if (e.which == 13) {
+                        submit(input);
+                        _this.removeClass('hidden')
+                    }
+                });
+
+            })
+</script>
+{template '_footer'}

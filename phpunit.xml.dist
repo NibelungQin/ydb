@@ -1,0 +1,27 @@
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true">
+    <php>
+        <ini name="memory_limit" value="2G"/>
+    </php>
+    <testsuites>
+        <testsuite name="Integration">
+            <directory>tests/Integration/Repository</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory>tests/Unit/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">addons/ewei_shopv2/</directory>
+            <directory suffix=".php">app/</directory>
+            <directory suffix=".php">web/</directory>
+            <directory suffix=".php">framework/</directory>
+            <exclude>
+                <directory suffix=".php">framework/library/</directory>
+                <directory suffix=".php">addons/ewei_shopv2/classes/Entity/</directory>
+                <directory suffix=".php">addons/ewei_shopv2/vendor/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

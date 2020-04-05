@@ -1,0 +1,163 @@
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">
+        基本信息
+    </div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'goods' $item}
+                <input type="text" name="displayorder" id="displayorder" class="form-control" value="{$item['displayorder']}" readonly />
+                <span class='help-block'>数字越大，排名越靠前,如果为空，默认排序方式为创建时间</span>
+                {else}
+                <div class='form-control-static'>{$item['displayorder']}</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告名称</label>
+            {ife 'goods' $item}
+                <div class="col-sm-7 goodsname"  style="padding-right:0;" >
+                    <input type="text" name="title" id="title" class="form-control" value="{$item['title']}" data-parent=".goodsname" data-rule-required="true" readonly />
+                </div>
+                <!--<div class="col-sm-2" style="padding-left:5px">-->
+                    <!--<input type="text" name="unit" id="unit" class="form-control" value="{$item['unit']}" placeholder="单位, 如: 套" />-->
+                <!--</div>-->
+            {else}
+                <div class='form-control-static'>{$item['title']}</div>
+            {/if}
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">广告副标题</label>
+            {ife 'goods' $item}
+                <div class="col-sm-9 subtitle">
+                    <input type="text" name="description" id="description" class="form-control" value="{$item['description']}" data-parent=".description" readonly />
+                </div>
+            {else}
+                <div class='form-control-static'>{$item['description']}</div>
+            {/if}
+        </div>
+    </div>
+</div>
+
+
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">
+        广告信息
+    </div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告图片</label>
+            <div class="col-sm-9 col-xs-12 gimgs">
+                {loop $piclist $p}
+                    <a href='{php echo tomedia($p)}' target='_blank'>
+                        <img src="{php echo tomedia($p)}" style='height:100px;border:1px solid #ccc;padding:1px;float:left;margin-right:5px;' />
+                    </a>
+                {/loop}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">广告价格</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'goods' $item}
+                    <div class="input-group">
+                        <input type="text" name="groupsprice" id="groupsprice" class="form-control" value="{$item['groupsprice']}" readonly />
+                        <span class="input-group-addon">元 原价</span>
+                        <input type="text" name="price" id="price" class="form-control" value="{$item['price']}" readonly />
+                        <span class="input-group-addon">元</span>
+                    </div>
+                    <span class='help-block'>尽量填写完整，有助于于广告销售的数据分析</span>
+                {else}
+                    <div class='form-control-static'>现价：{$item['groupsprice']} 元 原价：{$item['price']} 元 成本：{$item['price']} 元</div>
+                {/if}
+            </div>
+        </div>
+        <!--<div class="form-group">-->
+            <!--<label class="col-lg control-label">购买次数限制</label>-->
+            <!--<div class="col-xs-12 col-sm-9">-->
+                <!--<div class="input-group fixsingle-input-group">-->
+                    <!--{ife 'advertisement.goods' $item}-->
+                        <!--<input type="text" name="purchaselimit" class="form-control" value="{$item['purchaselimit']}" readonly />-->
+                        <!--<span class="input-group-addon">次</span>-->
+                    <!--{else}-->
+                        <!--<div class='form-control-static'>{$item['purchaselimit']}次</div>-->
+                    <!--{/if}-->
+                <!--</div>-->
+                <!--<span class='help-block'>个人购买次数限制，默认是0，没有次数限制</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="form-group  goodstype goodstype0">
+            <label class="col-lg control-label">数量</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement' $item}
+                    <div class="input-group fixsingle-input-group">
+                        <input type='text' class='form-control' name='goodsnum' value="{if $item['goodsnum']}{$item['goodsnum']}{else}1{/if}" readonly />
+                    </div>
+                    <span class="help-block">自定义数量，默认是1</span>
+                {else}
+                    <div class='form-control-static'>{$item['goodsnum']}</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group  goodstype goodstype0">
+            <label class="col-lg control-label">单位</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement.goods' $item}
+                <div class="input-group fixsingle-input-group">
+                    <input type='text' class='form-control' name='units' value="{if $item['units']}{$item['units']}{else}套{/if}" readonly />
+                </div>
+                <span class="help-block">自定义单位，如果不填写默认是【套】</span>
+                {else}
+                <div class='form-control-static'>{$item['units']}</div>
+                {/if}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">已出售数</label>
+            <div class="col-sm-6 col-xs-12">
+                {ife 'goods' $item}
+                    <div class="input-group">
+                        <input type="text" name="sales" id="sales" class="form-control" value="{$item['sales']}" readonly />
+                        <span class="input-group-addon">套</span>
+                    </div>
+                {else}
+                    <div class='form-control-static'>{$item['sales']} 套</div>
+                {/if}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">
+        广告属性
+    </div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上架</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'goods' $item}
+                    <label class="radio-inline"><input type="radio" name="status" value="1" {if $item['status'] == 1}checked="true"{/if}  readonly  /> 是</label>
+                    <label class="radio-inline"><input type="radio" name="status" value="0" {if empty($item['status'])}checked="true"{/if} readonly /> 否</label >
+                    <span class="help-block"></span>
+                {else}
+                    <div class='form-control-static'>{if empty($item['seven'])}否{else}是{/if}</div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script language="javascript">
+    require(['jquery.ui'],function(){
+        $('.multi-img-details').sortable();
+    })
+</script>

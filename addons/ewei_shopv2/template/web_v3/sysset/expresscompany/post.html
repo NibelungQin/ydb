@@ -1,0 +1,64 @@
+{template '_header'}
+
+<div class="page-header"> 
+    当前位置：<span class="text-primary">{if !empty($info['id'])}编辑{else}添加{/if}快递公司 <small>{if !empty($info['id'])}修改【{$info['name']}】{/if}</small></span>
+</div>
+
+   <div class="page-content">
+       <form action="" method="post" class="form-horizontal form-validate" enctype="multipart/form-data" >
+           <div class="form-group">
+               <label class="col-lg control-label">快递公司名称</label>
+               <div class="col-sm-9 col-xs-12">
+                   {ifp 'sysset.expresscompany.edit'}
+                   <div class="input-group">
+                       <input type="text" name="name" class="form-control" value="{$info['name']}" id="advurl" />
+                   </div>
+                   {else}
+                   <input type="hidden" name="name" value="{$info['name']}" />
+                   <div class='form-control-static'>{$data['express']}</div>
+                   {/if}
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-lg control-label">快递100编号</label>
+               <div class="col-sm-9 col-xs-12">
+                   {ifp 'sysset.expresscompany.edit'}
+                   <div class="input-group">
+                       <input type="text" name="express" class="form-control" value="{$info['express']}" id="advurl" />
+                   </div>
+                   {else}
+                   <input type="hidden" name="express" value="{$info['express']}" />
+                   <div class='form-control-static'>{$data['express']}</div>
+                   {/if}
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-lg control-label">快递鸟编号</label>
+               <div class="col-sm-9 col-xs-12">
+                   {ifp 'sysset.expresscompany.edit'}
+                   <div class="input-group">
+                       <input type="text" name="kuaidiniao" class="form-control" value="{$info['kuaidiniao']}" id="advurl" />
+                   </div>
+                   {else}
+                   <input type="hidden" name="kuaidiniao" value="{$info['kuaidiniao']}" />
+                   <div class='form-control-static'>{$data['kuaidiniao']}</div>
+                   {/if}
+               </div>
+           </div>
+           <div class="form-group"></div>
+           <div class="form-group">
+               <label class="col-lg control-label"></label>
+               <div class="col-sm-9 col-xs-12">
+                   {ifp 'sysset.category.edit'}
+                   <input type="submit" value="提交" class="btn btn-primary"  />
+
+                   {/if}
+               </div>
+           </div>
+           {if !empty($info['id'])}
+           <input type="hidden" name="id" value="{$info['id']}" />
+           {/if}
+       </form>
+   </div>
+ 
+{template '_footer'}     

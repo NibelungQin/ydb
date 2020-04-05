@@ -1,0 +1,206 @@
+<style type="text/css">
+    .img-thumbnail {width: 100px;height: 100px;}
+</style>
+<div class="form-group">
+    <label class="col-lg control-label must">广告标题</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+            <input type='text' class='form-control'  value="{$item['adv_title']}" readonly />
+        {else}
+            <div class='form-control-static'>{$item['adv_title']}</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label must">广告图片</label>
+    <div class="col-sm-9 col-xs-12 gimgs">
+        {loop $piclist_adv $p}
+            <a href='{php echo tomedia($p)}' target='_blank'>
+                <img src="{php echo tomedia($p)}" style='height:100px;border:1px solid #ccc;padding:1px;float:left;margin-right:5px;' />
+            </a>
+        {/loop}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-lg control-label">广告价格</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+        <div class="input-group fixmore-input-group">
+            <input type="text"  class="form-control" value="{$item['groupsprice']}" readonly />
+            <span class="input-group-addon">元 原价</span>
+            <input type="text"  class="form-control" value="{$item['adv_price']}" readonly />
+            <span class="input-group-addon">元</span>
+        </div>
+        <span class='help-block'>尽量填写完整，有助于于商品销售的数据分析</span>
+        {else}
+        <div class='form-control-static'>拼团价：{$item['groupsprice']} 元， 原价：{$item['adv_price']} 元 </div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label must">所属商家</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+            <div class="input-group fixsingle-input-group">
+                <input type='text' class='form-control' value="{$item['merchname']}" readonly/>
+            </div>
+        {else}
+            <div class='form-control-static'>{$item['merchname']}</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label must">商品标题</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+        <input type='text' class='form-control'  value="{$item['g_title']}" readonly />
+        {else}
+        <div class='form-control-static'>{$item['g_title']}</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label must">商品图片</label>
+    <div class="col-sm-9 col-xs-12 gimgs">
+        {loop $piclist_goods $p}
+            <a href='{php echo tomedia($p)}' target='_blank'>
+                <img src="{php echo tomedia($p)}" style='height:100px;border:1px solid #ccc;padding:1px;float:left;margin-right:5px;' />
+            </a>
+        {/loop}
+    </div>
+</div>
+<div class="form-group  goodstype goodstype0">
+    <label class="col-lg control-label">接单赏金</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+            {loop $levellist $index $le}
+                <div class="input-group fixsingle-input-group">
+                    <span class="input-group-addon">{$le['levelname']}</span>
+                    <input type='text' class='form-control' name='task_money[]' value="{$item['task_money']['money'][$index]}" />
+                    <input type='hidden' class='form-control' name='level_task_id[]' value="{$le['id']}" />
+                    <span class="input-group-addon">元</span>
+                </div>
+            {/loop}
+            <span class="help-block">根据不同会员身份等级获取不同接单赏金，自定义数量，默认是0</span>
+        {else}
+            <div class='form-control-static'>{$item['task_money']}元</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">接任务人数次数限制</label>
+    <div class="col-xs-12 col-sm-9">
+        <div class="input-group fixsingle-input-group">
+            {ife 'advertisement.order_adv' $item}
+                <input type="text" name="task_limit_num" class="form-control" value="{$item['task_limit_num']}" />
+                <span class="input-group-addon">次</span>
+            {else}
+                <div class='form-control-static'>{$item['task_limit_num']}次</div>
+            {/if}
+        </div>
+        <span class='help-block'>针对于此广告接任务次数限制，默认是0，没有次数限制</span>
+    </div>
+</div>
+<div class="form-group  goodstype goodstype0">
+    <label class="col-lg control-label">单次分享浏览推荐赏金</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+            {loop $levellist $index $le}
+                <div class="input-group fixsingle-input-group">
+                    <span class="input-group-addon">{$le['levelname']}</span>
+                    <input type='text' class='form-control' name='share_money[]' value="{$item['share_money']['money'][$index]}" />
+                    <input type='hidden' class='form-control' name='level_share_id[]' value="{$le['id']}" />
+                    <span class="input-group-addon">元</span>
+                </div>
+            {/loop}
+            <span class="help-block">推荐分享浏览，推荐人可拿取自己不同等级身份的赏金，自定义数量，默认是0</span>
+        {else}
+            <div class='form-control-static'>{$item['share_money']}元</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">分享次数</label>
+    <div class="col-sm-6 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+            <div class="input-group fixsingle-input-group">
+                <input type="text" name="share_num" id="share_num" class="form-control" value="{$item['share_num']}" />
+                <span class="input-group-addon">次</span>
+            </div>
+            <span class="help-block">可根据情况设置虚拟分享次数，会员分享后此数据就增加, 自定义数量，默认是0</span>
+        {else}
+            <div class='form-control-static'>{$item['share_num']} 次</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">浏览次数</label>
+    <div class="col-sm-6 col-xs-12">
+        {ife 'advertisement.order_adv' $item}
+            <div class="input-group fixsingle-input-group">
+                <input type="text" name="seen_num" id="seen_num" class="form-control" value="{$item['seen_num']}" />
+                <span class="input-group-addon">次</span>
+            </div>
+            <span class="help-block">可根据情况设置虚拟浏览次数，会员浏览后此数据就增加, 自定义数量，默认是0</span>
+        {else}
+            <div class='form-control-static'>{$item['seen_num']} 次</div>
+        {/if}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">平台抽取广告费用比例</label>
+    <div class="col-xs-12 col-sm-9">
+        <div class="input-group fixsingle-input-group">
+            {ife 'advertisement.order_adv' $item}
+                <input type="text" name="system_pro" class="form-control" value="{$item['system_pro']}" />
+                <span class="input-group-addon">%</span>
+            {else}
+                <div class='form-control-static'>{$item['system_pro']}%</div>
+            {/if}
+        </div>
+        <span class='help-block'>此比例是按广告费用的百分比计算，自定义数量，默认是0，不抽取广告费用抽成</span>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">状态</label>
+    <div class="col-xs-12 col-sm-8">
+        <div class="input-group fixsingle-input-group">
+            {ife 'advertisement.order_adv' $item}
+                <label class="radio radio-inline">
+                    <input type="radio" name="o_g_status" value="1" {if intval($item['o_g_status']) ==1 }checked="checked"{/if}> 上架
+                </label>
+                <label class="radio radio-inline">
+                    <input type="radio" name="o_g_status" value="0" {if intval($item['o_g_status']) ==0}checked="checked"{/if}> 下架
+                </label>
+            {else}
+                <div class='form-control-static'>{if intval($item['o_g_status']) ==1 }上架{else}下架{/if}</div>
+            {/if}
+        </div>
+    </div>
+</div>
+
+<script language="javascript">
+    require(['jquery.ui'],function(){
+        $('.multi-img-details').sortable();
+    });
+
+    require(['bootstrap'], function () {
+        $('#myTab a').click(function (e) {
+            $('#tab').val( $(this).attr('href'));
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    });
+</script>
+<script type="text/javascript">
+    $(function(){
+        $("input[name='single']").click(function(){
+            if(this.value== true){
+                $("#single").show()
+            }else{
+                $("#single").hide();
+            }
+        });
+    });
+</script>

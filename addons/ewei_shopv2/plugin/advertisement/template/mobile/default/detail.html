@@ -1,0 +1,120 @@
+{template '_header'}
+{php $this->followBar()}
+<link rel="stylesheet" href="../addons/ewei_shopv2/plugin/groups/template/mobile/default/css/style.css?v=2018530" />
+<style type="text/css">
+    i{font-style: normal;}
+    .order_goods_img img {border: 1px solid rgb(215, 215, 215); border-image: none; width: 60px; height: 60px; display: block;}
+    .order_goods_price i {font-size: 9px;}
+    #cover{display:none;position:absolute;left:0;top:0;z-index:18888;background-color:#000000;opacity:0.7;}
+    #guide{display:none;position:absolute;right:18px;top:5px;z-index:19999;}
+    #guide img{width:260px;height:180px;}
+
+    .pp_tips {padding: 10px 5px; text-align: center; font-size: 14px;}
+    .pp_tips b {margin: 0px 5px; color: rgb(223, 33, 39); font-size: 18px;}
+
+    #shareit img {max-width: 100%;}
+    .mod_footer_lk a {height: 12px; color: rgb(153, 153, 153); line-height: 12px; overflow: hidden; padding-right: 8px; margin-right: 8px; border-right-color: rgb(215, 215, 215); border-right-width: 1px;
+        border-right-style: solid;}
+    .mod_footer_lk a:last-child {padding-right: 0px; margin-right: 0px; border-right-color: currentColor; border-right-width: 0px; border-right-style: none;}
+    .address_new button {border-radius: 2px; border: 0px currentColor; border-image: none; width: 100%; height: 40px; color: rgb(255, 255, 255); line-height: 40px; font-size: 16px; margin-bottom: 10px; display: block; background-color: rgb(56, 132, 255);
+    }
+    .fui-tab.detail-tab {margin: 0;margin-top: 0.5rem;}
+
+    .fui-tab.detail-tab:before {content: '';position: absolute;left: 0;top: 0;width: 200%;border-top: 1px solid #d0d0d0;display: block;
+        -webkit-transform-origin: 0 0;transform-origin: 0 0;-webkit-transform: scale(.5, .5);transform: scale(.5, .5);}
+    .fui-tab.detail-tab:after {-webkit-transform-origin: 0 0;-ms-transform-origin: 0 0;transform-origin: 0 0;-webkit-transform: scaleY(0.5);-ms-transform: scaleY(0.5);
+        transform: scaleY(0.5);}
+    .detail-block > div{display: none;background: #fff;padding:0.2rem;border-bottom:1px solid #f0f0f0;}
+    .tab-basic img{max-width:100%;}
+    .groupstime{
+        height:1.8rem;
+        width:100%;
+        background:#fff4f4;
+        font-size:0.6rem;
+        font-weight:bold;
+        line-height:1.8rem;
+        color:#ff5555;
+        text-align:center;
+    }
+    .lynn_opengroups_head{
+        border-bottom:none;
+    }
+</style>
+<div class='fui-page creditshop-detail-page order-list-page'>
+    <div class="fui-header">
+        <div class="fui-header-left">
+            <a class="back" href="{php echo mobileUrl('order')}"></a>
+        </div>
+        <div class="title">任务详情</div>
+        <!--<div class="fui-header-right">-->
+            <!--<span class="icon icon-group" onclick="location.href='{php echo mobileUrl('advertisement/goods')}'" style="font-size:1.1rem;"></span>-->
+        <!--</div>-->
+    </div>
+
+    <div class='fui-content' style="padding-bottom:0;top:2.2rem;">
+        <div class="lynn_opengroups_head fui-list">
+            <a href="" class="lynn_index_list_a fui-list-media">
+                <img src="{php echo tomedia($detail['thumb'])}" alt="{$detail['title']}" onerror="this.src='../addons/ewei_shopv2/static/images/nopic100.jpg'">
+            </a>
+            <div class="fui-list-inner lynn_opengroups_head_goods ">
+                <h2>{$detail['title']}</h2>
+                <style>
+                    .lynn_opengroups_head_goods .price {
+                        font-size: 0.6rem;
+                        color: #999;
+                        line-height: 2rem;
+                        overflow: hidden;
+                    }
+                    .lynn_opengroups_head_goods .price strong {
+                        font-size: 1rem;
+                        font-weight: bold;
+                        color: #ff5555;
+                    }
+                    .lynn_opengroups_head_goods .subtitle {
+                        line-height: 0.85rem;
+                        font-size: 0.6rem;
+                        color: #999;
+                        margin-top: 0.42rem;
+                    }
+                </style>
+                <div class="price">
+                    <strong>¥ {$detail['marketprice']}/1件</strong> <del>原价¥ {$detail['productprice']}</del>
+                </div>
+                <div style=" margin-top:0rem;margin-bottom:0.42rem;">
+                    <p style="float:left;line-height: 0.85rem;font-size: 0.6rem;color: #999;">已有<span style="color:#ff5555;">{$share_num}</span>人分享了您的任务</p>
+                    <!--<p style="float:right;line-height: 0.85rem;font-size: 0.6rem;color: #999;">浏览量：{$detail['seen_num']}次</p>-->
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pp" style="padding: 0 0.6rem 25rem 0.6rem;">
+            <!--<div id="" style="clear: both;"></div>-->
+            <div class="num" style="width:100%;text-align:center;">已有<span style="color:#ff5555;">{$share_num}</span>人浏览了您分享的任务</div>
+            <div class="pp_users" id="pp_users" style="width:100%;">
+                {loop $share_data $order}
+                    {if $order}
+                        <a href="javascript:void(0);" class="pp_users_item">
+                            <img src="{$order['avatar']}" onerror="this.src='../addons/ewei_shopv2/plugin/groups/template/mobile/default/images/avatar.png'">
+                        </a>
+                    {else}
+                        <a href="javascript:void(0);" class="pp_users_item">
+                            <img src="../addons/ewei_shopv2/plugin/groups/template/mobile/default/images/avatar.png">
+                        </a>
+                    {/if}
+                {/loop}
+            </div>
+        </div>
+    </div>
+    <!--<div class="fui-navbar lynn_footer">-->
+        <!--<a class="home" href="{php echo mobileUrl('advertisement')}">-->
+            <!--<p class="fa icon icon-home"></p>-->
+            <!--返回首页-->
+        <!--</a>-->
+        <!--<a class="other" href="javascript:void(0);">-->
+            <!--<p class="">团购已成功</p>-->
+        <!--</a>-->
+    <!--</div>-->
+</div>
+{php $this->footerMenus()}
+{template '_footer'}

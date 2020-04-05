@@ -1,0 +1,85 @@
+<style type="text/css">
+.tabs-container .panel-body{border:none;}
+.kf_span{height:34px;float:left;line-height: 34px;padding:0 5px;}
+</style>
+
+
+<!--<div class='form-group-title'>自动退款</div>-->
+<!--<div class="form-group">-->
+	<!--<label class="col-lg control-label">拼团失败X小时后</label>-->
+	<!--<div class="col-sm-9 col-xs-12">-->
+		<!--{ifp 'packagegoods.set.edit'}-->
+		<!--<div class="input-group fixsingle-input-group">-->
+			<!--<input type="text" name="data[refund]" id="refund" class="form-control"  value="{$data['refund']}" />-->
+			<!--<div class="input-group-addon">小时</div>-->
+		<!--</div>-->
+		<!--<span class='help-block'>拼团失败后 ，系统会在X小时后自动退款，设置0小时为不自动退款。</span>-->
+		<!--{else}-->
+		<!--{if $data['refund'] > 0}-->
+		<!--<div class='form-control-static'>{$data['refund']}小时</div>-->
+		<!--{else}-->
+		<!--<div class='form-control-static'>不自动退款</div>-->
+		<!--{/if}-->
+		<!--{/if}-->
+	<!--</div>-->
+<!--</div>-->
+
+<div class='form-group-title'>自动收货</div>
+<div class="form-group ">
+	<label class="col-lg control-label">发货几天后</label>
+	<div class="col-sm-9 col-xs-12">
+		{ifp 'packagegoods.set.edit'}
+		<div class="input-group fixsingle-input-group">
+			<input type="text" name="data[receive]" class="form-control" value="{$data['receive']}" />
+			<div class="input-group-addon">天</div>
+		</div>
+		<span class='help-block'>订单发货后，用户收货的天数，如果在期间未确认收货，系统自动完成收货，空为不自动收货</span>
+		{else}
+		<input type="hidden" name="data[receive]" value="{$data['receive']}"/>
+		<div class='form-control-static'>
+			{if empty($data['receive'])}9{else}{$data['receive']}{/if} 天
+		</div>
+		{/if}
+	</div>
+</div>
+
+
+<script language="javascript">
+	$(function () {
+		$(":checkbox[name='data[creditdeduct]']").click(function () {
+			if ($(this).prop('checked')) {
+				$("#creditdeduct").show();
+			}
+			else {
+				$("#creditdeduct").hide();
+			}
+		})
+		$(":checkbox[name='data[discount]']").click(function () {
+			if ($(this).prop('checked')) {
+				$("#discount").show();
+			}
+			else {
+				$("#discount").hide();
+			}
+		})
+
+		$(":checkbox[name='data[moneydeduct]']").click(function () {
+			if ($(this).prop('checked')) {
+				$("#moneydeduct").show();
+			}
+			else {
+				$("#moneydeduct").hide();
+			}
+		})
+		$("#refund").keyup(function(){
+			var val = parseInt(Math.abs($(this).val()));
+			if(val >= 1){
+				return true;
+			}else{
+				val = 0;
+			}
+			$(this).val(val);
+		})
+
+	})
+</script>

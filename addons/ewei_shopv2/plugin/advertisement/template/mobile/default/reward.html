@@ -1,0 +1,105 @@
+{template '_header'}
+<link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/plugin/task/static/css/task.css?v={php echo time();}"/>
+<link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/plugin/task/static/css/iconfont.css?v={php echo time();}"/>
+<link rel="stylesheet" href="../addons/ewei_shopv2/plugin/task/static/css/foxui.extends.css">
+<script src="../addons/ewei_shopv2/plugin/task/static/js/iscroll.js"></script>
+<title>任务中心</title>
+<div class="fui-page">
+    <div class="fui-header" style="z-index: 99">
+        <div class="fui-header-left">
+            <a class="back" href="{php echo mobileUrl('task')}"></a>
+        </div>
+        <div class="title" style="width:100%;text-align:center;">赏金奖励记录</div>
+    </div>
+    <div class="fui-content navbar" style="padding-bottom: 0;">
+        {if empty($list)}
+            <div style="height: 7rem;line-height:7rem;width: 100%;text-align: center;color: #d0d0d0;font-size: 1rem">暂时没有任何赏金奖励</div>
+        {/if}
+        <div class='fui-list-group'>
+            {loop $list $rk $reward}
+                <div class="reward-list">
+                    <div class="reward-list-inner">
+                        <div class="title">
+                            <!--奖励图标-->
+                            {if $reward['type'] == 1}
+                                <i class="iconfont icon-hongbao"></i>&yen{$reward['task_bonus']}元
+                            {elseif $reward['type'] == 2}
+                                <i class="iconfont icon-yue"></i>&yen{$reward['share_bonus']}元
+                            {/if}
+                        </div>
+                        <div class="des" style="color: #ccc">
+                            {if $reward['type'] == 1}
+                                {if $reward['task_bonus_status'] == 1 }
+                                    <span style="display:block;">恭喜您赚取{$reward['type_name']}</span>
+                                {elseif $reward['task_bonus_status'] == 0}
+                                    <span style="display:block;">赏金暂未发放</span>
+                                {elseif $reward['task_bonus_status'] == 2}
+                                    <span style="display:block;">抱歉任务已结束，可领取其他任务分享哦</span>
+                                {/if}
+                            {elseif $reward['type'] == 2}
+                                {if $reward['share_bonus_status'] == 1 }
+                                    <span style="display:block;">恭喜您赚取{$reward['type_name']}</span>
+                                {elseif $reward['share_bonus_status'] == 0}
+                                    <span style="display:block;">赏金暂未发放</span>
+                                {elseif $reward['share_bonus_status'] == 2}
+                                    <span style="display:block;">抱歉任务已结束，可领取其他任务分享哦</span>
+                                {/if}
+                            {/if}
+
+                            {if $reward['type'] == 1}
+                                {php echo date('Y-m-d H:i:s',$reward['task_createtime'])}
+                            {elseif $reward['type'] == 2}
+                                {php echo date('Y-m-d H:i:s',$reward['share_createtime'])}
+                            {/if}
+                        </div>
+                    </div>
+                    <!--领取按钮-->
+                    <div class="reward-list-right">
+                        {if $reward['type'] == 1}
+                            {if $reward['task_bonus_status'] == 1 }
+                                已发放
+                            {elseif $reward['task_bonus_status'] == 0}
+                                未发放
+                            {elseif $reward['task_bonus_status'] == 2}
+                                发放失败
+                            {/if}
+                        {elseif $reward['type'] == 2}
+                            {if $reward['share_bonus_status'] == 1}
+                                已发放
+                            {elseif $reward['share_bonus_status'] == 0}
+                                未发放
+                            {elseif $reward['share_bonus_status'] == 2}
+                                发放失败
+                            {/if}
+                        {/if}
+                    </div>
+                </div>
+            {/loop}
+        </div>
+    </div>
+</div>
+<script>
+    function getRed(id) {
+        FoxUI.loader.show('mini');
+        $.ajax({
+            url:'{php echo mobileUrl("task.getred")}',
+            type:'post',
+            data:{id:id},
+            success:function (data) {
+                data = JSON.parse(data);
+                if (data.status == 1){
+                    FoxUI.loader.hide();
+                    FoxUI.alert('请到微信查收红包','领取成功');
+                }else{
+                    FoxUI.loader.hide();
+                    FoxUI.alert('红包发送失败','领取失败');
+                }
+            },
+            error:function () {
+                FoxUI.alert('请稍后重试','网络错误');
+            }
+        });
+    }
+</script>
+<!--<p>{php $this->footerMenus()}</p>-->
+{template '_footer'}

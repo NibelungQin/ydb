@@ -1,0 +1,56 @@
+<div class="form-group-title" style="margin-top: -25px">关注公众号奖励</div>
+<div class="form-group">
+    <label class="col-lg control-label">推荐人获得</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife $pluginName $item}
+        <div class="input-group">
+            <input type="text" name="reccredit" class="form-control" value="{$item['reccredit']}" />
+            <div class="input-group-addon">积分</div>
+            
+        </div>
+        {else} 
+        <div class='form-control-static'>
+            {if !empty($item['recredit'])}{$item['reccredit']} 积分; {/if}
+            
+        </div> 
+        {/if}
+    </div>
+</div> 
+
+<div class="form-group">
+    <label class="col-lg control-label"></label>
+    <div class="col-sm-9 col-xs-12">
+        {ife $pluginName $item}
+        <div class="input-group">
+            <div class="input-group-addon">每月最多</div>
+            <input type="text" name="reccredit_totle" class="form-control" value="{$item['reccredit_totle']}" />
+            <div class="input-group-addon">积分</div>
+
+        </div>
+        <div class="help-block">设置每月上限获得积分和现金数,默认0为不限制</div>
+        {else}
+        <div class='form-control-static'>
+            {if !empty($item['recredit'])}每月最多 {$item['reccredit_totle']} 积分; {/if}
+        </div>
+        {/if}
+    </div>
+</div>
+
+         <script language="javascript">
+         {if $plugin_coupon}
+              
+                function removeCoupon(type){
+                      $(":input[name=" + type + "couponid]").val('');
+                      $("."+type + "group").find('button:first').html('选择优惠券');
+                }
+   
+    function select_coupon(o,obj) {
+         
+         
+         var type = $(obj).closest('.content').data('name')=='reccouponid'?'rec':'sub';
+         $("."+type + "group").find('button:first').html( "赠送优惠券: [" + o.id + "]" + o.couponname );
+         
+    }
+{/if}
+	
+    </script>

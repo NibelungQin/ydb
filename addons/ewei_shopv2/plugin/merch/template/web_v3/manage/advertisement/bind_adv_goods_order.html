@@ -1,0 +1,234 @@
+{template '_header'}
+<style>
+    tbody tr td{
+        position: relative;
+    }
+    tbody tr  .icow-weibiaoti--{
+        visibility: hidden;
+        display: inline-block;
+        color: #fff;
+        height:18px;
+        width:18px;
+        background: #e0e0e0;
+        text-align: center;
+        line-height: 18px;
+        vertical-align: middle;
+    }
+    tbody tr:hover .icow-weibiaoti--{
+        visibility: visible;
+    }
+    tbody tr  .icow-weibiaoti--.hidden{
+        visibility: hidden !important;
+    }
+    .full .icow-weibiaoti--{
+        margin-left: 10px;
+    }
+    .full>span{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        vertical-align: middle;
+        align-items: center;
+    }
+    tbody tr .label{
+        margin: 5px 0;
+    }
+    .goods_attribute a{
+        cursor: pointer;
+    }
+</style>
+
+<div class="page-header">
+    当前位置：<span class="text-primary">已绑定商品订单管理</span>
+</div>
+
+<div class="page-content">
+
+    <form action="./merchant.php" method="get" class="form-horizontal form-search" role="form">
+        <input type="hidden" name="c" value="site" />
+        <input type="hidden" name="a" value="entry" />
+        <input type="hidden" name="m" value="ewei_shopv2" />
+        <input type="hidden" name="do" value="web" />
+        <input type="hidden" name="r"  value="advertisement" />
+
+        <div class="page-toolbar">
+            <div class="input-group col-sm-6 pull-right">
+                <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="ID/广告套餐名称/商品名称">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"> 搜索</button>
+                </span>
+            </div>
+        </div>
+    </form>
+
+    {if count($list)>0}
+    <table class="table table-hover table-responsive">
+        <thead class="navbar-inner">
+            <tr>
+                <th style="width:25px;"></th>
+                <th style="width:80px;">商品标题</th>
+                <th style="width:200px;">&nbsp;</th>
+                <th style="width:100px;">所属广告</th>
+                <th style="width:200px;">&nbsp;</th>
+                <th style="width:140px;">绑定日期</th>
+                <th style="width:80px;">审核状态</th>
+                <th  style="width:80px;" >广告状态</th>
+                <th style="width: 120px;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {loop $list $item}
+                <tr>
+                    <td>
+                        <input type='checkbox'  value="{$item['id']}"/>
+                    </td>
+                    <td>
+                        <img src="{php echo tomedia($item['goods']['thumb'])}" style="width:72px;height:72px;padding:1px;border:1px solid #efefef;margin: 7px 0" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'" />
+                    </td>
+                    <td class='full' >
+                        <span>
+                            <span>{$item['goods']['title']}</span>
+                        </span>
+                    </td>
+                    <td>
+                        <img src="{php echo tomedia($item['adv']['thumb'])}" style="width:72px;height:72px;padding:1px;border:1px solid #efefef;margin: 7px 0" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'" />
+                    </td>
+                    <td>
+                         <span>
+                            <span>{$item['adv']['title']}</span>
+                        </span>
+                    </td>
+                    <td>
+                        {php echo date('Y-m-d H:i:s',$item['createtime'])}
+                    </td>
+                    <td  style="overflow:visible;">
+                        <span class='label {if $item['status']==1}label-primary{else}label-default{/if}'>
+                        {if $item['status']==0}审核中{elseif $item['status'] ==1}已通过{else}未通过{/if}
+                        </span>
+                    </td>
+                    <td  style="overflow:visible;">
+                        <span class='label {if $item['o_g_status']==1}label-primary{else}label-default{/if}'
+                            {ifp 'goods.edit'}
+                                data-toggle='ajaxSwitch'
+                                data-confirm = "确认是{if $item['o_g_status']==1}下架{else}上架{/if}？"
+                                data-switch-refresh='true'
+                                data-switch-value='{$item['o_g_status']}'
+                                data-switch-value0='0|下架|label label-default|{php echo webUrl('advertisement/status',array('o_g_status'=>1,'id'=>$item['id']))}'
+                                data-switch-value1='1|上架|label label-primary|{php echo webUrl('advertisement/status',array('o_g_status'=>0,'id'=>$item['id']))}'
+                            {/if}
+                            >
+                            {if $item['status']==1}上架{else}下架{/if}
+                        </span>
+                    </td>
+                    <td  style="overflow:visible;position:relative">
+                        {ifp 'advertisement.edit|advertisement.view'}
+                            <a  class='btn btn-op btn-operation' href="{php echo webUrl('advertisement/bind_adv_goods_edit', array('id' => $item['id'],'page'=>$page))}" >
+                                 <span data-toggle="tooltip" data-placement="top" title="" data-original-title="查看设置">
+                                    <i class="icow icow-bianji2"></i>
+                                 </span>
+                            </a>
+                        {/if}
+                    </td>
+                </tr>
+            {/loop}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <!--<input type="checkbox">-->
+                </td>
+                <td colspan="4">
+                    <div class="btn-group">
+                        <!--{ifp 'advertisement.view'}-->
+                        <!--<button class="btn btn-default btn-sm  btn-operation" type="button" data-toggle='batch-remove' data-confirm="确认需要选取此广告套餐?" data-href="{php echo webUrl('advertisement/selection_adv')}">-->
+                        <!--<i class='icow icow-shanchu1'></i> 选取套餐-->
+                        <!--</button>-->
+                        <!--{/if}-->
+                    </div>
+                </td>
+                <td colspan="5" style="text-align: right">
+                    {$pager}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    {else}
+    <div class='panel panel-default'>
+        <div class='panel-body' style='text-align: center;padding:30px;'>
+            暂时没有任何套餐绑定的商品!
+        </div>
+    </div>
+    {/if}
+</div>
+<script>
+    $(document).on("click", '[data-toggle="ajaxEdit2"]',
+            function (e) {
+                var _this = $(this)
+                $(this).addClass('hidden')
+                var obj = $(this).parent().find('a'),
+                        url = obj.data('href') || obj.attr('href'),
+                        data = obj.data('set') || {},
+                        html = $.trim(obj.text()),
+                        required = obj.data('required') || true,
+                        edit = obj.data('edit') || 'input';
+                var oldval = $.trim($(this).text());
+                e.preventDefault();
+
+                submit = function () {
+                    e.preventDefault();
+                    var val = $.trim(input.val());
+                    if (required) {
+                        if (val == '') {
+                            tip.msgbox.err(tip.lang.empty);
+                            return;
+                        }
+                    }
+                    if (val == html) {
+                        input.remove(), obj.html(val).show();
+                        //obj.closest('tr').find('.icow').css({visibility:'visible'})
+                        return;
+                    }
+                    if (url) {
+                        $.post(url, {
+                            value: val
+                        }, function (ret) {
+
+                            ret = eval("(" + ret + ")");
+                            if (ret.status == 1) {
+                                obj.html(val).show();
+
+                            } else {
+                                tip.msgbox.err(ret.result.message, ret.result.url);
+                            }
+                            input.remove();
+                        }).fail(function () {
+                            input.remove(), tip.msgbox.err(tip.lang.exception);
+                        });
+                    } else {
+                        input.remove();
+                        obj.html(val).show();
+                    }
+                    obj.trigger('valueChange', [val, oldval]);
+                },
+                        obj.hide().html('<i class="fa fa-spinner fa-spin"></i>');
+                var input = $('<input type="text" class="form-control input-sm" style="width: 80%;display: inline;" />');
+                if (edit == 'textarea') {
+                    input = $('<textarea type="text" class="form-control" style="resize:none;" rows=3 width="100%" ></textarea>');
+                }
+                obj.after(input);
+
+                input.val(html).select().blur(function () {
+                    submit(input);
+                    _this.removeClass('hidden')
+
+                }).keypress(function (e) {
+                    if (e.which == 13) {
+                        submit(input);
+                        _this.removeClass('hidden')
+                    }
+                });
+
+            })
+</script>
+{template '_footer'}

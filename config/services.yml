@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Ydb\Repository\:
+    resource: ../addons/ewei_shopv2/classes/Repository/
+  Ydb\Service\:
+    resource: ../addons/ewei_shopv2/classes/Service/
+
+  Doctrine\ORM\EntityManagerInterface:
+    synthetic: true
+  Doctrine\ORM\ObjectManager:
+    synthetic: true
+  Psr\Log\LoggerInterface:
+    synthetic: true

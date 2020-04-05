@@ -1,0 +1,332 @@
+{template '_header'}
+<style>
+    tbody tr td{
+        position: relative;
+    }
+    tbody tr  .icow-weibiaoti--{
+        visibility: hidden;
+        display: inline-block;
+        color: #fff;
+        height:18px;
+        width:18px;
+        background: #e0e0e0;
+        text-align: center;
+        line-height: 18px;
+        vertical-align: middle;
+    }
+    tbody tr:hover .icow-weibiaoti--{
+        visibility: visible;
+    }
+    tbody tr  .icow-weibiaoti--.hidden{
+        visibility: hidden !important;
+    }
+    .full .icow-weibiaoti--{
+        margin-left: 10px;
+    }
+    .full>span{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        vertical-align: middle;
+        align-items: center;
+    }
+    tbody tr .label{
+        margin: 5px 0;
+    }
+    .goods_attribute a{
+        cursor: pointer;
+    }
+</style>
+
+<div class="page-header">
+    当前位置：<span class="text-primary">广告套餐管理</span>
+</div>
+
+<div class="page-content">
+
+    <form action="./merchant.php" method="get" class="form-horizontal form-search" role="form">
+        <input type="hidden" name="c" value="site" />
+        <input type="hidden" name="a" value="entry" />
+        <input type="hidden" name="m" value="ewei_shopv2" />
+        <input type="hidden" name="do" value="web" />
+        <input type="hidden" name="r"  value="advertisement" />
+
+        <div class="page-toolbar">
+            <div class="input-group col-sm-6 pull-right">
+                <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="ID/广告套餐名称">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"> 搜索</button>
+                </span>
+            </div>
+        </div>
+    </form>
+
+{if count($list)>0}
+    <table class="table table-hover table-responsive">
+        <thead class="navbar-inner">
+            <tr>
+                <th style="width:25px;"></th>
+                <th style="width:80px;text-align:center;">排序</th>
+                <th style="width:80px;">广告标题</th>
+                <th style="width:200px;">&nbsp;</th>
+                <th>广告价</th>
+                <th>库存</th>
+                <th>销量</th>
+                <th>状态</th>
+                <th style="width:80px;">选取数量(单位：/套)</th>
+                <th style="width: 120px;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {loop $list $item}
+                <tr>
+                    <td class="aja_stock">
+                        <input class="adv_id" name="adv_id[]" class="" type='checkbox'  value="{$item['id']}" />
+                        <input class="stock" type="hidden" name="stock[]" value="{$item['stock']}">
+                    </td>
+                    <td style='text-align:center;'>
+                        {$item['displayorder']}
+                    </td>
+                    <td>
+                        <img src="{php echo tomedia($item['thumb'])}" style="width:72px;height:72px;padding:1px;border:1px solid #efefef;margin: 7px 0" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'" />
+                    </td>
+                    <td class='full' >
+                        <span>
+                            <span>{$item['title']}</span>
+                        </span>
+                    </td>
+                    <td>&yen;
+                        {$item['groupsprice']}
+                    </td>
+                    <td>{$item['stock']}</td>
+                    <td>{$item['sales']}</td>
+
+                    <td  style="overflow:visible;">
+                        <span class='label {if $item['status']==1}label-primary{else}label-default{/if}'>
+                            {if $item['status']==1}上架{else}下架{/if}
+                        </span>
+                    </td>
+                    <td class="adv_num">
+                        <input type="text" style="border:1px solid #44abf7;width:60px;border_radius:5px !important;text-align:center;color:#44abf7 !important;" name="adv_num[]" value="" placeholder="选取数量">
+                    </td>
+                    <td class="sel_adv"  style="overflow:visible;position:relative">
+                        {ifp 'advertisement.edit|advertisement.view'}
+                            <a  class='btn btn-op btn-operation' href="{php echo webUrl('advertisement/edit', array('id' => $item['id'],'page'=>$page))}" >
+                                 <span data-toggle="tooltip" data-placement="top" title="" data-original-title="查看套餐">
+                                    <i class="icow icow-bianji2"></i>
+                                 </span>
+                            </a>
+                        {/if}
+                        {ifp 'advertisement.edit|advertisement.view'}
+                            <a  class='btn btn-op btn-operation adv_ajaxRemove'   data-adv-id="{$item['id']}" >
+                                 <span data-toggle="tooltip" data-placement="top" title="" data-original-title="选取套餐">
+                                    <i class="icow icow-31"></i>
+                                 </span>
+                            </a>
+                        {/if}
+                    </td>
+
+                </tr>
+            {/loop}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <input type="checkbox">
+                </td>
+                <td colspan="4">
+                    <div class="btn-group">
+                        {ifp 'advertisement.view'}
+                            <button class="btn btn-default btn-sm btn-operation more_adv_ajaxRemove" data-toggle='batch-remove' type="button">
+                                <i class='icow icow-31'></i> 选取套餐
+                            </button>
+                        {/if}
+                    </div>
+                </td>
+                <td colspan="5" style="text-align: right">
+                    {$pager}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+{else}
+  <div class='panel panel-default'>
+      <div class='panel-body' style='text-align: center;padding:30px;'>
+          暂时没有任何广告套餐!
+      </div>
+  </div>
+{/if}
+</div>
+    <script>
+        var adv_ids = [];
+        var adv_nums = [];
+        $('.adv_id').click(function() {
+            var obj = $(this)
+            var adv_num = parseInt(obj.parents('td').siblings('.adv_num').children('input').val());
+            var stock = parseInt(obj.next('.stock').val());
+            if(!adv_num) {
+                tip.msgbox.err('请选取广告套餐的数量');
+                setTimeout(function () {
+                    location.href = "{php echo webUrl('advertisement')}";return;
+                },1000);
+            }else if(adv_num > stock) {
+                tip.msgbox.err('广告套餐的数量不足，请联系平台管理员！');
+                setTimeout(function () {
+                    location.href = "{php echo webUrl('advertisement')}";return;
+                },1000);
+            }
+            var adv_id = obj.val();
+            if(!adv_id) {
+                tip.msgbox.err('请选取广告套餐');
+                setTimeout(function () {
+                    location.href = "{php echo webUrl('advertisement')}";return;
+                },1000);
+            }
+            adv_nums.push(adv_num);
+            adv_ids.push(adv_id);
+        })
+
+        //多选广告套餐
+        $('.more_adv_ajaxRemove').click(function() {
+            if(!adv_nums) {
+                tip.msgbox.err('请选取广告套餐的数量');
+                setTimeout(function () {
+                    location.href = "{php echo webUrl('advertisement')}";return;
+                },1000);
+            }
+            if(!adv_ids) {
+                tip.msgbox.err('请选取广告套餐');
+                setTimeout(function () {
+                    location.href = "{php echo webUrl('advertisement')}";return;
+                },1000);
+            }
+            var url = "{php echo webUrl('advertisement/more_selected_adv')}"
+            var data = {
+                'adv_nums':adv_nums,
+                'adv_ids':adv_ids
+            }
+            $.ajax({
+                type : 'post',
+                url : url,
+                data : data,
+                dataType : 'json',
+                success : function(data){
+                    if(data.status==1){
+                        tip.msgbox.suc('选取成功');
+                        setTimeout(function () {
+                            location.href = "{php echo webUrl('advertisement/selected_adv', array('id' => $item['id'],'page'=>$page))}";return;
+                        },2000);
+                    }else{
+                        tip.msgbox.err('系统错误，操作失败');return;
+                    }
+                }
+            })
+        })
+
+
+
+        //单选广告套餐
+        $('.adv_ajaxRemove').click(function() {
+            var obj = $(this)
+            var adv_num = parseInt(obj.parent('.sel_adv').siblings('.adv_num').children('input').val());
+            var stock = parseInt(obj.parent('.sel_adv').siblings('.aja_stock').children(".stock").val());
+            if(!adv_num ) {
+                tip.msgbox.err('请选取广告套餐的数量');return;
+            }else if(adv_num > stock) {
+                tip.msgbox.err('广告套餐的数量不足，请联系平台管理员！');return;
+            }
+            var url = "{php echo webUrl('advertisement/selection_adv')}"
+            var data = {
+                'adv_num':adv_num,
+                'adv_id':obj.attr('data-adv-id')
+            }
+            $.ajax({
+                type : 'post',
+                url : url,
+                data : data,
+                dataType : 'json',
+                success : function(data){
+                    if(data.status==1){
+                        tip.msgbox.suc('选取成功');
+                        setTimeout(function () {
+                            location.href = "{php echo webUrl('advertisement/selected_adv', array('id' => $item['id'],'page'=>$page))}";return;
+                        },2000);
+                    }else{
+                        tip.msgbox.err('系统错误，操作失败');
+                    }
+                }
+            })
+        })
+
+        
+        $(document).on("click", '[data-toggle="ajaxEdit2"]',
+            function (e) {
+                var _this = $(this)
+                $(this).addClass('hidden')
+                var obj = $(this).parent().find('a'),
+                    url = obj.data('href') || obj.attr('href'),
+                    data = obj.data('set') || {},
+                    html = $.trim(obj.text()),
+                    required = obj.data('required') || true,
+                    edit = obj.data('edit') || 'input';
+                var oldval = $.trim($(this).text());
+                e.preventDefault();
+
+                submit = function () {
+                    e.preventDefault();
+                    var val = $.trim(input.val());
+                    if (required) {
+                        if (val == '') {
+                            tip.msgbox.err(tip.lang.empty);
+                            return;
+                        }
+                    }
+                    if (val == html) {
+                        input.remove(), obj.html(val).show();
+                        //obj.closest('tr').find('.icow').css({visibility:'visible'})
+                        return;
+                    }
+                    if (url) {
+                        $.post(url, {
+                            value: val
+                        }, function (ret) {
+
+                            ret = eval("(" + ret + ")");
+                            if (ret.status == 1) {
+                                obj.html(val).show();
+
+                            } else {
+                                tip.msgbox.err(ret.result.message, ret.result.url);
+                            }
+                            input.remove();
+                        }).fail(function () {
+                            input.remove(), tip.msgbox.err(tip.lang.exception);
+                        });
+                    } else {
+                        input.remove();
+                        obj.html(val).show();
+                    }
+                    obj.trigger('valueChange', [val, oldval]);
+                },
+                    obj.hide().html('<i class="fa fa-spinner fa-spin"></i>');
+                var input = $('<input type="text" class="form-control input-sm" style="width: 80%;display: inline;" />');
+                if (edit == 'textarea') {
+                    input = $('<textarea type="text" class="form-control" style="resize:none;" rows=3 width="100%" ></textarea>');
+                }
+                obj.after(input);
+
+                input.val(html).select().blur(function () {
+                    submit(input);
+                    _this.removeClass('hidden')
+
+                }).keypress(function (e) {
+                    if (e.which == 13) {
+                        submit(input);
+                        _this.removeClass('hidden')
+                    }
+                });
+
+            })
+    </script>
+{template '_footer'}

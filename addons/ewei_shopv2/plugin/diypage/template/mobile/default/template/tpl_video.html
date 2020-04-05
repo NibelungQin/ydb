@@ -1,0 +1,51 @@
+{if !empty($diyitem['data'])}
+
+<div class="fui-picture" style="padding-bottom: {$diyitem['style']['paddingtop']}px; background: {$diyitem['style']['background']};">
+    {loop $diyitem['data']  $pictureitem}
+    <a href="{php echo empty($pictureitem['linkurl'])? 'javascript:;': $pictureitem['linkurl']}" style="display: block; padding: {$diyitem['style']['paddingtop']}px {$diyitem['style']['paddingleft']}px;" data-nocache="true" class="myVideo">
+
+        <video id="myVideo" style=" width:100%; height:13rem"  poster="../addons/ewei_shopv2/plugin/diypage/static/images/videoImg.jpg"
+               controls="controls"
+               x-webkit-airplay="true" playsinline webkit-playsinline="true" x5-video-player-type="h5" src="{php echo tomedia($pictureitem['imgurl'])}"
+        >
+            <!--<source src="{php echo tomedia($pictureitem['imgurl'])}" type="video/ogg">-->
+            <!--<source src="{php echo tomedia($pictureitem['imgurl'])}" type="video/mp4">-->
+            <!--<source src="{php echo tomedia($pictureitem['imgurl'])}" type="video/webm">-->
+        </video>
+
+
+        <!--<div id="output"></div>-->
+        <!--<img src="{php echo tomedia($pictureitem['imgurl'])}" />-->
+    </a>
+    {/loop}
+</div>
+{/if}
+<!--<script type="text/javascript">-->
+<!--(function(){-->
+<!--var video, output;-->
+<!--var scale = 0.8;-->
+<!--console.log($(".myVideo"))-->
+
+<!--for(var i=0;i<$(".myVideo").length;i++){-->
+<!--var initialize = function() {-->
+<!--output = document.getElementById("output");-->
+<!--video = document.getElementById("myVideo");-->
+<!--video.addEventListener('loadeddata',captureImage);-->
+<!--};-->
+<!--var captureImage = function() {-->
+<!--var canvas = document.createElement("canvas");-->
+<!--canvas.width = video.videoWidth * scale;-->
+<!--canvas.height = video.videoHeight * scale;-->
+<!--canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);-->
+
+<!--var img = document.createElement("img");-->
+<!--img.src = canvas.toDataURL("image/png");-->
+<!--video.attr("poster",canvas.toDataURL("image/png"))-->
+<!--//            output.appendChild(img);-->
+<!--};-->
+
+<!--initialize();-->
+<!--}-->
+
+<!--})();-->
+<!--</script>-->

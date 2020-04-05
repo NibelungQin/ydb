@@ -1,0 +1,94 @@
+<div class="form-group">
+    <label class="col-lg control-label">分销层级</label>
+    <div class="col-sm-8">
+    	{ifp 'commission.set.edit'}
+			<label class="radio-inline"><input type="radio"  name="data[level]" value="0" {if $data['level'] ==0} checked="checked"{/if} /> 不开启</label>
+			<label class="radio-inline"><input type="radio"  name="data[level]" value="1" {if $data['level'] ==1} checked="checked"{/if} /> 一级分销</label>
+			<label class="radio-inline"><input type="radio"  name="data[level]" value="2" {if $data['level'] ==2} checked="checked"{/if} /> 二级分销</label>
+			<label class="radio-inline"><input type="radio"  name="data[level]" value="3" {if $data['level'] ==3} checked="checked"{/if} /> 三级分销</label>
+			<div class='help-block'>默认佣金比例请到<a href='{php echo webUrl('commission/level')}' target='_blank'>【分销商等级】</a>进行设置</div>
+		{else}
+			{if $data['level'] ==0}不开启{/if}
+			{if $data['level'] ==1}一级分销{/if}
+			{if $data['level'] ==2}二级分销{/if}
+			{if $data['level'] ==3}三级分销{/if}
+		{/if}
+    </div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">佣金计算模式</label>
+	<div class="col-sm-9 col-xs-12">
+		{ifp 'commission.set.edit'}
+		<label class="radio-inline"><input type="radio"  name="data[calcutype]" value="1" {if $data['calcutype'] ==1} checked="checked"{/if} /> 按商品售价</label>
+		<label class="radio-inline"><input type="radio"  name="data[calcutype]" value="2" {if $data['calcutype'] ==2} checked="checked"{/if} /> 按商品利润</label>
+		<span class='help-block'>佣金计算模式</span>
+		{else}
+		{if $data['calcutype'] ==2}按商品利润{else}按订单总额{/if}
+		{/if}
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">佣金计算方式</label>
+	<div class="col-sm-9 col-xs-12">
+		{ifp 'commission.set.edit'}
+		<label class="radio-inline"><input type="radio"  name="data[commissiontype]" value="0" {if $data['commissiontype'] ==0} checked="checked"{/if} /> 默认方式</label>
+		<label class="radio-inline"><input type="radio"  name="data[commissiontype]" value="1" {if $data['commissiontype'] ==1} checked="checked"{/if} /> 实际支付方式</label>
+		<span class="help-block">默认方式: 除运费和会员折扣(或促销折扣)外其他所有费用全部计算佣金<br>实际支付方式: 只计算实际支付和余额抵扣部分的佣金(包括余额支付)</span>
+		{else}
+		{if $data['commissiontype']==0}开启{else}关闭{/if}
+		{/if}
+	</div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">分销内购</label>
+    <div class="col-sm-9 col-xs-12">
+    	{ifp 'commission.set.edit'}
+			<label class="radio-inline"><input type="radio"  name="data[selfbuy]" value="1" {if $data['selfbuy'] ==1} checked="checked"{/if} /> 开启</label>
+			<label class="radio-inline"><input type="radio"  name="data[selfbuy]" value="0" {if $data['selfbuy'] ==0} checked="checked"{/if} /> 关闭</label>
+			<span class='help-block'>开启分销内购，分销商自己购买商品，享受一级佣金，上级享受二级佣金，上上级享受三级佣金</span>
+		{else}
+			{if $data['selfbuy'] ==0}关闭{else}开启{/if}
+		{/if}
+    </div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">佣金显示</label>
+	<div class="col-sm-9 col-xs-12">
+		{ifp 'commission.set.edit'}
+		<label class="radio-inline"><input type="radio"  name="data[cansee]" value="1" {if $data['cansee'] ==1} checked="checked"{/if} /> 开启</label>
+		<label class="radio-inline"><input type="radio"  name="data[cansee]" value="0" {if $data['cansee'] ==0} checked="checked"{/if} /> 关闭</label>
+		<span class='help-block'>开启分销佣金显示，会在商城首页，商品列表页，商品详情页显示用户可获得的佣金</span>
+		{else}
+		{if $data['cansee'] ==0}关闭{else}开启{/if}
+		{/if}
+	</div>
+</div>
+<div  id="seetitle" {if empty($data['cansee'])}style="display: none" {else}{/if}>
+<div class="form-group" >
+	<label class="col-lg control-label">显示文字</label>
+	<div class="col-sm-9 col-xs-12">
+		{ifp 'commission.set.edit'}
+		<input type="text" name="data[seetitle]" class="form-control" value="{$data['seetitle']}" maxlength="6">
+		{else}
+		{$data['seetitle']}
+		{/if}
+		<span class="help-block">自定义分销佣金显示文字，如：<span class="text text-danger">可获得佣金**元</span></span>
+	</div>
+</div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">团队人数统计</label>
+	<div class="col-sm-9 col-xs-12">
+		{ifp 'commission.set.edit'}
+		<label class="radio-inline">
+			<input type="radio"  name="data[child_agent_count_by]" value="level" {if $data['child_agent_count_by'] !='all'} checked="checked"{/if} /> 统计分销等级内成员
+		</label>
+		<label class="radio-inline">
+			<input type="radio"  name="data[child_agent_count_by]" value="all" {if $data['child_agent_count_by'] =='all'} checked="checked"{/if} /> 统计所有成员
+		</label>
+		<span class='help-block'>统计分销等级内成员按所开启的分销等级统计，统计所有成员会计算所有团队成员</span>
+		{else}
+		{if $data['child_agent_count_by'] =='all'}统计所有成员{else}统计分销等级内成员{/if}
+		{/if}
+	</div>
+</div>

@@ -1,0 +1,1 @@
+<?phpdefined('IN_IA') or exit('Access Denied');define('IMS_FAMILY', 'x');define('IMS_VERSION', '1.7.0');define('IMS_RELEASE_DATE', '201803020000');

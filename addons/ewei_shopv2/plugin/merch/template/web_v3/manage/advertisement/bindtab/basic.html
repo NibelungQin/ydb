@@ -1,0 +1,221 @@
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">
+        广告套餐信息
+    </div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement' $item}
+                    <input type="text"  id="displayorder" class="form-control" value="{$item['displayorder']}" readonly />
+                    <span class='help-block'>数字越大，排名越靠前,如果为空，默认排序方式为创建时间</span>
+                {else}
+                <div class='form-control-static'>{$item['displayorder']}</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告名称</label>
+            {ife 'advertisement' $item}
+                <div class="col-sm-7 goodsname"  style="padding-right:0;" >
+                    <input type="text" id="title" class="form-control" value="{$item['title']}" data-parent=".goodsname" data-rule-required="true" readonly />
+                </div>
+            {else}
+                <div class='form-control-static'>{$item['title']}</div>
+            {/if}
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">副标题</label>
+            {ife 'advertisement' $item}
+                <div class="col-sm-9 subtitle">
+                    <input type="text" id="description" class="form-control" value="{$item['description']}" data-parent=".description" readonly />
+                </div>
+            {else}
+                <div class='form-control-static'>{$item['description']}</div>
+            {/if}
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告图片</label>
+            <div class="col-sm-9 col-xs-12 gimgs">
+                {loop $piclist_adv $p}
+                    <a href='{php echo tomedia($p)}' target='_blank'>
+                        <img src="{php echo tomedia($p)}" style='height:100px;border:1px solid #ccc;padding:1px;float:left;margin-right:5px;' />
+                    </a>
+                {/loop}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告价格</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement' $item}
+                    <div class="input-group">
+                        <input type="text"  id="groupsprice" class="form-control" value="{$item['groupsprice']}" readonly />
+                        <span class="input-group-addon">元 原价</span>
+                        <input type="text"  id="price" class="form-control" value="{$item['price']}" readonly />
+                        <span class="input-group-addon">元</span>
+                    </div>
+                    <span class='help-block'>尽量填写完整，有助于于广告销售的数据分析</span>
+                {else}
+                    <div class='form-control-static'>现价：{$item['groupsprice']} 元 原价：{$item['price']} 元 成本：{$item['price']} 元</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group" style="height: auto; overflow:hidden;">
+            <label class="col-sm-2 control-label must">选择绑定商品</label>
+            <div class="col-sm-9 col-xs-12">
+                {ifp 'shop.recommand.main'}
+                    <div class="input-group">
+                        <input type="text" id="goodsid" name="goodsid" value="" class="form-control text" readonly="">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary select_goods" type="button">选择商品</button>
+                        </div>
+                    </div>
+                    <div class="input-group multi-img-details container ui-sortable goods_show">
+                        {if !empty($goods)}
+                            {loop $goods $g}
+                                <div class="multi-item" data-id="{$g['id']}" data-name="goodsid" id="{$g['id']}">
+                                    <img class="img-responsive img-thumbnail" src="{php echo tomedia($g['thumb'])}" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'" style="width:100px;height:100px;">
+                                    <div class="img-nickname">{$g['title']}</div>
+                                    <input type="hidden" value="{$g['id']}" name="goodsid[]">
+                                    <em onclick="removeHtml({$g['id']})" class="close">×</em>
+                                    <div style="clear:both;"></div>
+                                </div>
+                            {/loop}
+                        {/if}
+                    </div>
+                    <script>
+                        $(function(){
+                            var title = '';
+                            $('.img-nickname').each(function(){
+                                title += $(this).html()+';';
+                            });
+                            $('#goodsid_text').val(title);
+                        })
+                        myrequire(['web/goods_selector'],function (Gselector) {
+                            $('.select_goods').click(function () {
+                                var ids = select_goods_ids();
+                                Gselector.open('goods_show','',{$_W['merchid']},true,'',ids);
+                            });
+                        })
+                        function goods_show(data) {
+                            if(data.act == 1){
+                                var html = '<div class="multi-item" data-id="'+data.id+'" data-name="goodsid" id="'+data.id+'">'
+                                        +'<img class="img-responsive img-thumbnail" src="'+data.thumb+'" onerror="this.src=\'../addons/ewei_shopv2/static/images/nopic.png\'" style="width:100px;height:100px;">'
+                                        +'<div class="img-nickname">'+data.title+'</div>'
+                                        +'<input type="hidden" value="'+data.id+'" name="goodsid[]">'
+                                        +'<em onclick="removeHtml('+data.id+')" class="close">×</em>'
+                                        +'</div>';
+
+                                $('.goods_show').append(html);
+                                var title = '';
+                                $('.img-nickname').each(function(){
+                                    title += $(this).html()+';';
+                                });
+                                $('#goodsid_text').val(title);
+                            }else if(data.act == 0){
+                                removeHtml(data.id);
+                            }
+
+                        }
+                        function removeHtml(id){
+                            $("[id='"+id+"']").remove();
+                            var title = '';
+                            $('.img-nickname').each(function(){
+                                title += $(this).html()+';';
+                            });
+                            $('#goodsid_text').val(title);
+                        }
+                        function select_goods_ids(){
+                            var goodsids = [];
+                            $(".multi-item").each(function(){
+                                goodsids.push($(this).attr('data-id'));
+                            });
+                            return goodsids;
+                        }
+                    </script>
+                {else}
+                    <div class="input-group multi-img-details container ui-sortable">
+                        {loop $goods $item}
+                        <div data-name="goodsid" data-id="{$item['id']}" class="multi-item">
+                            <img src="{php echo tomedia($item['thumb'])}" class="img-responsive img-thumbnail">
+                            <div class="img-nickname">{$item['title']}</div>
+                        </div>
+                        {/loop}
+                    </div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">购买次数限制</label>
+            <div class="col-xs-12 col-sm-9">
+                <div class="input-group fixsingle-input-group">
+                    {ife 'advertisement.goods' $item}
+                        <input type="text" name="purchaselimit" class="form-control" value="{$item['purchaselimit']}" readonly />
+                        <span class="input-group-addon">次</span>
+                    {else}
+                        <div class='form-control-static'>{$item['purchaselimit']}次</div>
+                    {/if}
+                </div>
+                <span class='help-block'>个人购买次数限制，默认是0，没有次数限制</span>
+            </div>
+        </div>
+        <div class="form-group  goodstype goodstype0">
+            <label class="col-sm-2 control-label">数量</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement' $item}
+                    <div class="input-group fixsingle-input-group">
+                        <input type='text' class='form-control' name='goodsnum' value="{if $item['goodsnum']}{$item['goodsnum']}{else}1{/if}" readonly />
+                    </div>
+                    <span class="help-block">自定义数量，默认是1</span>
+                {else}
+                    <div class='form-control-static'>{$item['goodsnum']}</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group  goodstype goodstype0">
+            <label class="col-sm-2 control-label">单位</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement.goods' $item}
+                <div class="input-group fixsingle-input-group">
+                    <input type='text' class='form-control' name='units' value="{if $item['units']}{$item['units']}{else}套{/if}" readonly />
+                </div>
+                <span class="help-block">自定义单位，如果不填写默认是【套】</span>
+                {else}
+                <div class='form-control-static'>{$item['units']}</div>
+                {/if}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">已出售数</label>
+            <div class="col-sm-6 col-xs-12">
+                {ife 'goods' $item}
+                    <div class="input-group">
+                        <input type="text" name="sales" id="sales" class="form-control" value="{$item['sales']}" readonly />
+                        <span class="input-group-addon">套</span>
+                    </div>
+                {else}
+                    <div class='form-control-static'>{$item['sales']} 套</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上架</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'goods' $item}
+                    <label class="radio-inline"><input type="radio" name="status" value="1" {if $item['status'] == 1}checked="true"{/if}  readonly  /> 是</label>
+                    <label class="radio-inline"><input type="radio" name="status" value="0" {if empty($item['status'])}checked="true"{/if} readonly /> 否</label >
+                    <span class="help-block"></span>
+                {else}
+                    <div class='form-control-static'>{if empty($item['seven'])}否{else}是{/if}</div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="javascript">
+    require(['jquery.ui'],function(){
+        $('.multi-img-details').sortable();
+    })
+</script>

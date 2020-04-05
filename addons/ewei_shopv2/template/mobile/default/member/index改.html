@@ -1,0 +1,361 @@
+{template '_header'}
+<style>
+	.fui-icon-col.external.before:before{
+		content: '';
+		position: absolute;
+		top: 1rem;
+		bottom: 1rem;
+		left: 0;
+		width: 1px;
+		background-color: #ebebeb;
+		display: block;
+		z-index: 15;
+	}
+	.fui-icon-group.col-5 .fui-icon-col {
+		 width:25%;
+	 }
+</style>
+
+<div class='fui-page  fui-page-current'>
+    <div class="fui-header">
+		<div class="fui-header-left">
+			<a class="back" onclick='location.back()'></a>
+		</div>
+		<div class="title">会员中心</div>
+		<div class="fui-header-right"></div>
+	</div>
+
+	<div class='fui-content member-page navbar'>
+		<div style="overflow: hidden;height: 7.5rem;position: relative;background: #fff">
+			<div class="headinfo" style="z-index:100;border: none;">
+				<a class="setbtn" href="{php echo mobileUrl('member/info')}" data-nocache='true'><i class="icon icon-shezhi"></i></a>
+				<div class="child">
+					<div class="title">{$_W['shopset']['trade']['moneytext']}</div>
+					<div class="num">{php echo number_format($member['credit2'],2)}</div>
+					{if empty($_W['shopset']['trade']['closerecharge'])}<a href="{php echo mobileUrl('member/recharge')}"><div class="btn">充值</div></a>{/if}
+				</div>
+				<div class="child userinfo">
+					<a href="{php echo mobileUrl('member/info')}" data-nocache="true" style="color: white;">
+						<div class="face"><img src="{$member['avatar']}" onerror="this.src='../addons/ewei_shopv2/static/images/noface.png'"/></div>
+						<div class="name">{$member['nickname']}</div>
+					</a>
+					<div class="level" {if !empty($_W['shopset']['shop']['levelurl'])}onclick='location.href="{$_W['shopset']['shop']['levelurl']}"'{/if}>
+					{if empty($level['id'])}
+					[{if empty($_W['shopset']['shop']['levelname'])}普通会员{else}{$_W['shopset']['shop']['levelname']}{/if}]
+					{else}
+					[{$level['levelname']}]
+					{/if}
+					{if !empty($_W['shopset']['shop']['levelurl'])}<i class='icon icon-question1' style='font-size:0.65rem'></i>{/if}
+				</div>
+			</div>
+			<div class="child">
+				<div
+						 class="title">{$_W['shopset']['trade']['credittext']}</div>
+				<div class="num">{php echo number_format($member['credit1'],0)}</div>
+				{if $open_creditshop}<a href="{php echo mobileUrl('creditshop')}" class="external"><div class="btn">兑换</div></a>{/if}
+			</div>
+		</div>
+		<div class="member_header"></div>
+		</div>
+
+    {if p('task')}
+        {if p('task')->get_unread()}
+            <div class="fui-cell-group fui-cell-click" style="border-top: 1px solid #ebebeb;border-bottom: 1px solid #ebebeb;    margin-bottom: 0.5rem;">
+                <a class="fui-cell external" href="{php echo mobileUrl('task')}">
+                    <div class="fui-cell-icon"><i class="icon icon-gifts"></i></div>
+                    <style>
+                        .task-red-mark{background-color: #ff5555;position: absolute;width: 6.9px;height: 6.9px;border-radius: 50%;display: block;left: 6.9rem;top: 0.69rem}
+                    </style>
+                    <div class="fui-cell-text"><p>您有奖励待领取</p><span class="task-red-mark"></span></div>
+                    <div class="fui-cell-remark"></div>
+                </a>
+            </div>
+        {elseif p('task')->TasknewEntrance()}
+            <div class="fui-cell-group fui-cell-click" style="border-top: 1px solid #ebebeb;border-bottom: 1px solid #ebebeb;    margin-bottom: 0.5rem;">
+                <a class="fui-cell" href="{php echo mobileUrl('task')}">
+                    <div class="fui-cell-icon"><i class="icon icon-gifts"></i></div>
+                    <div class="fui-cell-text"><p>任务中心</p></div>
+                    <div class="fui-cell-remark"></div>
+                </a>
+            </div>
+        {/if}
+    {/if}
+
+
+
+
+
+
+	<div class="fui-cell-group fui-cell-click" style="margin-top: 0">
+		<a class="fui-cell external" href="{php echo mobileUrl('order')}">
+			<div class="fui-cell-icon"><i class="icon icon-dingdan1"></i></div>
+			<div class="fui-cell-text">我的订单</div>
+			<div class="fui-cell-remark" style="font-size: 0.65rem;">查看全部订单</div>
+		</a>
+		{php $check_cycelbuy=p('cycelbuy')}
+		<div class="fui-icon-group selecter {if $check_cycelbuy}col-5{else}col-4{/if}">
+
+			<a class="fui-icon-col external" href="{php echo mobileUrl('order',array('status'=>0))}">
+				{if $statics['order_0']>0}<div class="badge">{$statics['order_0']}</div>{/if}
+				<div class="icon icon-green radius"><i class="icon icon-daifukuan1"></i></div>
+				<div class="text">待付款</div>
+			</a>
+			<a class="fui-icon-col external" href="{php echo mobileUrl('order',array('status'=>1))}">
+				{if $statics['order_1']>0}<div class="badge">{$statics['order_1']}</div>{/if}
+				<div class="icon icon-orange radius"><i class="icon icon-daifahuo1"></i></div>
+				<div class="text">待发货</div>
+			</a>
+			<a class="fui-icon-col external" href="{php echo mobileUrl('order',array('status'=>2))}">
+				{if $statics['order_2']>0}<div class="badge">{$statics['order_2']}</div>{/if}
+				<div class="icon icon-blue radius"><i class="icon icon-daishouhuo1"></i></div>
+				<div class="text">待收货</div>
+			</a>
+			<a class="fui-icon-col external" href="{php echo mobileUrl('order',array('status'=>4))}">
+				{if $statics['order_4']>0}<div class="badge">{$statics['order_4']}</div>{/if}
+				<div class="icon icon-pink radius"><i class="icon icon-daituikuan2"></i></div>
+				<div class="text">退换货</div>
+			</a>
+			<!--{if $check_cycelbuy}-->
+				<!--<a class="fui-icon-col external before" href="{php echo mobileUrl('cycelbuy/order/list')}">-->
+					<!--<div class="icon icon-pink radius"><i class="icon icon-xiangmuzhouqi" style="color: #ff6a54;"></i></div>-->
+					<!--<div class="text">周期购</div>-->
+				<!--</a>-->
+			<!--{/if}-->
+		</div>
+	</div>
+
+
+
+
+
+	<style>
+		.fui_cell_gai_gao {
+			width:33.3%;
+			float:left;
+			/*background:orange;*/
+		}
+		.fui_cell_gai_gao .fui_cell_gai_one_a {
+			/*background:yellow;*/
+			width:100%;
+			padding: 0.4rem 0rem 0rem 0rem;
+			margin:0.7rem 0;
+			border-right:1px solid #E6E6E6 !important;
+		}
+		.fui_cell_gai_gao .last {
+			border-right:none !important;
+		}
+		.fui_cell_gai_one_a img {
+			display:block;
+			width:1.8125rem;
+			height:1.625rem;
+			margin:0 auto;
+		}
+	</style>
+
+	<div class="fui-cell-group fui-cell-click ">
+		<div class="fui-icon-group selecter fui_cell_gai_one">
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a" href="{php echo mobileUrl('commission');}">
+					<img src="{EWEI_SHOPV2_STATIC}images/cwdl@2x.png" alt="">
+					<div class="text">成为代理</div>
+				</a>
+			</div>
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a" href="">
+					<img src="{EWEI_SHOPV2_STATIC}images/wdtd@2x.png" alt="">
+					<div class="text">我们团队</div>
+				</a>
+			</div>
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a last" href="{php echo mobileUrl('sign');}">
+					<img src="{EWEI_SHOPV2_STATIC}images/ttqd@2x.png" alt="">
+					<div class="text">天天签到</div>
+				</a>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+	</div>
+
+	<div class="fui-cell-group fui-cell-click ">
+		<div class="fui-icon-group selecter fui_cell_gai_one">
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a" href="{php echo mobileUrl('member/favorite');}">
+					<img src="{EWEI_SHOPV2_STATIC}images/wdgz@2x.png" alt="">
+					<div class="text">我的关注</div>
+				</a>
+			</div>
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a" href="{php echo mobileUrl('member/history');}">
+					<img src="{EWEI_SHOPV2_STATIC}images/wdzj@2x.png" alt="">
+					<div class="text">我的足迹</div>
+				</a>
+			</div>
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a last" href="{php echo mobileUrl('member/info');}">
+					<img src="{EWEI_SHOPV2_STATIC}images/hyzl@2x.png" alt="">
+					<div class="text">会员资料设置</div>
+				</a>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+	</div>
+
+
+	<div class="fui-cell-group fui-cell-click ">
+		<div class="fui-icon-group selecter fui_cell_gai_one">
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a" href="{php echo mobileUrl('member/address')}">
+					<img src="{EWEI_SHOPV2_STATIC}images/shdz@2x.png" alt="">
+					<div class="text">收货地址管理</div>
+				</a>
+			</div>
+			<div class="fui_cell_gai_gao">
+				<a class="fui-icon-col external fui_cell_gai_one_a" href="{php echo mobileUrl('creditshop')}">
+					<img src="{EWEI_SHOPV2_STATIC}images/Page 1@2x.png" alt="">
+					<div class="text">积分商城</div>
+				</a>
+			</div>
+			<!--<div class="fui_cell_gai_gao">-->
+				<!--<a class="fui-icon-col external fui_cell_gai_one_a last" href="">-->
+					<!--<img src="{EWEI_SHOPV2_STATIC}images/hyzl@2x.png" alt="">-->
+					<!--<div class="text">会员资料设置</div>-->
+				<!--</a>-->
+			<!--</div>-->
+			<div style="clear:both;"></div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!--<div class="fui-cell-group fui-cell-click">-->
+			<!--<a class="fui-cell" href="{php echo mobileUrl('member/cart');}">-->
+				<!--<div class="fui-cell-icon"><i class="icon icon-cart"></i></div>-->
+				<!--<div class="fui-cell-text"><p>我的购物车</p></div>-->
+				<!--<div class="fui-cell-remark">{if $statics['cart']>0}<span class='badge'>{$statics['cart']}</span>{/if}</div>-->
+			<!--</a>-->
+			<!--<a class="fui-cell" href="{php echo mobileUrl('member/favorite');}">-->
+				<!--<div class="fui-cell-icon"><i class="icon icon-like"></i></div>-->
+				<!--<div class="fui-cell-text"><p>我的关注</p></div>-->
+				<!--<div class="fui-cell-remark">{if $statics['favorite']>0}<span class='badge'>{$statics['favorite']}</span>{/if}</div>-->
+			<!--</a>-->
+
+			<!--<a class="fui-cell" href="{php echo mobileUrl('member/history');}">-->
+				<!--<div class="fui-cell-icon"><i class="icon icon-footprint"></i></div>-->
+				<!--<div class="fui-cell-text"><p>我的足迹</p></div>-->
+				<!--<div class="fui-cell-remark"></div>-->
+			<!--</a>-->
+			<!--&lt;!&ndash;&lt;!&ndash;<a class="fui-cell" href="{php echo mobileUrl('member/notice');}" data-nocache="true">&ndash;&gt;-->
+				<!--&lt;!&ndash;<div class="fui-cell-icon"><i class="icon icon-notice"></i></div>&ndash;&gt;-->
+				<!--&lt;!&ndash;<div class="fui-cell-text"><p>消息提醒设置</p></div>&ndash;&gt;-->
+				<!--&lt;!&ndash;<div class="fui-cell-remark"></div>&ndash;&gt;-->
+			<!--&lt;!&ndash;</a>&ndash;&gt;&ndash;&gt;-->
+			<!--&lt;!&ndash;{if $hasFullback}&ndash;&gt;-->
+				<!--&lt;!&ndash;<a class="fui-cell external" href="{php echo mobileUrl('member/fullback');}" data-nocache="true">&ndash;&gt;-->
+					<!--&lt;!&ndash;<div class="fui-cell-icon"><i class="icon icon-daituikuan2"></i></div>&ndash;&gt;-->
+					<!--&lt;!&ndash;<div class="fui-cell-text"><p>我的{php m('sale')->getFullBackText(true)}</p></div>&ndash;&gt;-->
+					<!--&lt;!&ndash;<div class="fui-cell-remark"></div>&ndash;&gt;-->
+				<!--&lt;!&ndash;</a>&ndash;&gt;-->
+			<!--&lt;!&ndash;{/if}&ndash;&gt;-->
+	<!--</div>-->
+
+
+
+	<!--<div class="fui-cell-group fui-cell-click">-->
+			<!--<a class="fui-cell" href="{php echo mobileUrl('member/address')}">-->
+				<!--<div class="fui-cell-icon"><i class="icon icon-dingwei1"></i></div>-->
+				<!--<div class="fui-cell-text"><p>收货地址管理</p></div>-->
+				<!--<div class="fui-cell-remark"></div>-->
+			<!--</a>-->
+	<!--</div>-->
+
+
+
+
+
+	{template '_copyright'}
+</div>
+
+<script language='javascript'>
+	require(['biz/member/index'], function (modal) {
+		modal.init();
+	});
+</script>
+
+
+
+
+
+<script  language='javascript'>
+	var lis = $('.banner-ul').find('li');
+	$('.banner-ul').width(lis.length*8.3+'rem');
+
+	function addCard(card_id,code) {
+
+		var data = {'openid': '{php echo $_W["openid"]}', 'card_id': card_id, 'code': code};
+		$.ajax({
+			url: "{php echo mobileUrl('sale/coupon/getsignature')}",
+			data: data,
+			cache: false
+		}).done(function (result) {
+			var data = jQuery.parseJSON(result);
+			if (data.status == 1) {
+				wx.addCard({
+					cardList: [
+						{
+							cardId: card_id,
+							cardExt: data.result.cardExt
+						}
+					],
+					success: function (res) {
+						//alert('已添加卡券：' + JSON.stringify(res.cardList));
+					},
+					cancel: function (res) {
+						//alert(JSON.stringify(res))
+					}
+				});
+			} else {
+				alert("微信接口繁忙,请稍后再试!");
+				alert(data.result.message);
+			}
+		});
+	}
+
+</script>
+
+{if empty($_GPC['isnewstore']) }
+	{php $this->footerMenus()}
+{else}
+	{template '../../../plugin/newstore/template/mobile/default/_menu'}
+{/if}
+
+{template '_footer'}

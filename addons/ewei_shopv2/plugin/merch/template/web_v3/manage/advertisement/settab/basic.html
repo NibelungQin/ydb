@@ -1,0 +1,169 @@
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">
+        广告及商品信息
+    </div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告名称</label>
+            {ife 'advertisement' $item}
+            <div class="col-sm-7 goodsname"  style="padding-right:0;" >
+                <input type="text" id="adv_title" class="form-control" value="{$item['adv_title']}" data-parent=".goodsname" data-rule-required="true" readonly />
+            </div>
+            {else}
+            <div class='form-control-static'>{$item['adv_title']}</div>
+            {/if}
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告图片</label>
+            <div class="col-sm-9 col-xs-12 gimgs">
+                {loop $piclist_adv $p}
+                <a href='{php echo tomedia($p)}' target='_blank'>
+                    <img src="{php echo tomedia($p)}" style='height:100px;border:1px solid #ccc;padding:1px;float:left;margin-right:5px;' />
+                </a>
+                {/loop}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">广告价格</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement' $item}
+                <div class="input-group">
+                    <input type="text" name="groupsprice" id="groupsprice" class="form-control" value="{$item['groupsprice']}" readonly />
+                    <span class="input-group-addon">元 原价</span>
+                    <input type="text" name="price" id="price" class="form-control" value="{$item['adv_price']}" readonly />
+                    <span class="input-group-addon">元</span>
+                </div>
+                <span class='help-block'>尽量填写完整，有助于于广告销售的数据分析</span>
+                {else}
+                <div class='form-control-static'>现价：{$item['groupsprice']} 元 原价：{$item['price']} 元 成本：{$item['price']} 元</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">所属商家</label>
+            {ife 'advertisement' $item}
+            <div class="col-sm-7 goodsname"  style="padding-right:0;" >
+                <input type="text" id="merchname" class="form-control" value="{$item['merchname']}" data-parent=".goodsname" data-rule-required="true" readonly />
+            </div>
+            {else}
+            <div class='form-control-static'>{$item['merchname']}</div>
+            {/if}
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">商品名称</label>
+            {ife 'advertisement' $item}
+            <div class="col-sm-7 goodsname"  style="padding-right:0;" >
+                <input type="text" id="g_title" class="form-control" value="{$item['g_title']}" data-parent=".goodsname" data-rule-required="true" readonly />
+            </div>
+            {else}
+            <div class='form-control-static'>{$item['g_title']}</div>
+            {/if}
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">商品图片</label>
+            <div class="col-sm-9 col-xs-12 gimgs">
+                {loop $piclist_goods $p}
+                <a href='{php echo tomedia($p)}' target='_blank'>
+                    <img src="{php echo tomedia($p)}" style='height:100px;border:1px solid #ccc;padding:1px;float:left;margin-right:5px;' />
+                </a>
+                {/loop}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">接单赏金</label>
+            <div class="col-sm-9 col-xs-12 gimgs">
+                {ife 'advertisement' $item}
+                {loop $levellist $index $le}
+                <div class="input-group fixsingle-input-group">
+                    <span class="input-group-addon">{$le['levelname']}</span>
+                    <input type="text" name="purchaselimit" class="form-control" value="{$item['task_money']['money'][$index]}" />
+                    <input type='hidden' class='form-control' name='level_task_id[]' value="{$le['id']}" />
+                    <span class="input-group-addon">元</span>
+                </div>
+                {/loop}
+                <span class="help-block">根据不同会员身份等级获取不同接单赏金，自定义数量，默认是0</span>
+                {else}
+                <div class='form-control-static'>{$item['task_money']}元</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">接任务人数次数限制</label>
+            <div class="col-sm-9 col-xs-12 gimgs">
+                {ife 'advertisement' $item}
+                <div class="input-group fixsingle-input-group">
+                    <input type='text' class='form-control'  value="{$item['task_limit_num']}" readonly />
+                </div>
+                <span class="help-block">针对于此广告接任务次数限制，默认是0，没有次数限制</span>
+                {else}
+                <div class='form-control-static'>{$item['task_limit_num']}</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">单次分享浏览推荐赏金</label>
+            <div class="col-sm-9 col-xs-12 gimgs">
+                {ife 'advertisement.order_adv' $item}
+                {loop $levellist $index $le}
+                <div class="input-group fixsingle-input-group">
+                    <span class="input-group-addon">{$le['levelname']}</span>
+                    <input type='text' class='form-control' name='share_money[]' value="{$item['share_money']['money'][$index]}" />
+                    <input type='hidden' class='form-control' name='level_share_id[]' value="{$le['id']}" />
+                    <span class="input-group-addon">元</span>
+                </div>
+                {/loop}
+                <span class="help-block">推荐分享浏览，推荐人可拿取自己不同等级身份的赏金，自定义数量，默认是0</span>
+                {else}
+                <div class='form-control-static'>{$item['share_money']}元</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">分享次数</label>
+            <div class="col-sm-6 col-xs-12 gimgs">
+                {ife 'advertisement.order_adv' $item}
+                <div class="input-group fixsingle-input-group">
+                    <input type="text" name="share_num" id="share_num" class="form-control" value="{$item['share_num']}" />
+                    <span class="input-group-addon">次</span>
+                </div>
+                <span class="help-block">可根据情况设置虚拟分享次数，会员分享后此数据就增加, 自定义数量，默认是0</span>
+                {else}
+                <div class='form-control-static'>{$item['share_num']} 次</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label must">浏览次数</label>
+            <div class="col-sm-6 col-xs-12 gimgs">
+                {ife 'advertisement.order_adv' $item}
+                <div class="input-group fixsingle-input-group">
+                    <input type="text" name="seen_num" id="seen_num" class="form-control" value="{$item['seen_num']}" />
+                    <span class="input-group-addon">次</span>
+                </div>
+                <span class="help-block">可根据情况设置虚拟浏览次数，会员浏览后此数据就增加, 自定义数量，默认是0</span>
+                {else}
+                <div class='form-control-static'>{$item['seen_num']} 次</div>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上架</label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'advertisement' $item}
+                <label class="radio-inline"><input type="radio" name="o_g_status" value="1" {if $item['o_g_status'] == 1}checked="true"{/if}  readonly  /> 是</label>
+                <label class="radio-inline"><input type="radio" name="o_g_status" value="0" {if empty($item['o_g_status'])}checked="true"{/if} readonly /> 否</label >
+                <span class="help-block"></span>
+                {else}
+                <div class='form-control-static'>{if $item['o_g_status']!=1}否{else}是{/if}</div>
+                {/if}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script language="javascript">
+    require(['jquery.ui'],function(){
+        $('.multi-img-details').sortable();
+    })
+</script>

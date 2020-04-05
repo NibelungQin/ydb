@@ -1,0 +1,65 @@
+{php $no_left =true;}
+{template '_header'}
+<script type="text/javascript" src="../addons/ewei_shopv2/static/js/dist/area/cascade.js"></script>
+<style type='text/css'>
+    .tabs-container .form-group {overflow: hidden;}
+    .tabs-container .tabs-left .panel-body {text-align:left;}
+    .tab-goods .nav li { width:120px; text-align:center; }
+    .tab-goods .nav li {float:left;}
+    .spec_item_thumb {position:relative;width:30px;height:20px;padding:0;border-left:none;}
+    .spec_item_thumb i { position:absolute;top:-5px;right:-5px; }
+    .region-goods-details {
+        background: #f8f8f8;
+        margin-bottom: 10px;
+        padding: 0 10px;
+    }
+    .region-goods-left{
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+        padding: 20px 0;
+    }
+    .region-goods-right{
+        border-left: 3px solid #fff;
+        padding: 10px 10px;
+    }
+</style>
+<div class="page-header">
+    当前位置：
+    <span class="text-primary">绑定广告套餐商品 <small>{if !empty($item['o_id'])}查看【{$item['goods']['title']}】{/if}</small></small></span>
+</div>
+<div class="page-content">
+    <form {ife 'advertisement' $item}action="" method="post"{/if} class="form-horizontal form-validate" enctype="multipart/form-data">
+    <input type="hidden" id="tab" name="tab" value="#tab_basic" />
+    <input type="hidden"  name="adv_id" value="{$item['adv_id']}" />
+    <div class="tabs-container tab-goods">
+        <div class="tabs-left">
+            <ul class="nav nav-tabs" id="myTab">
+                <li  {if empty($_GPC['bindtab']) || $_GPC['bindtab']=='basic'}class="active"{/if}><a href="#tab_basic">广告套餐</a></li>
+                <li  {if $_GPC['bindtab']=='option'}class="active"{/if} ><a href="#tab_option">库存/规格</a></li>
+                <li {if $_GPC['bindtab']=='des'}class="active"{/if} ><a href="#tab_des">详情</a></li>
+            </ul>
+            <div class="tab-content ">
+                <div class="tab-pane   {if empty($_GPC['bindtab']) || $_GPC['bindtab']=='basic'}active{/if}" id="tab_basic"><div class="panel-body">{template 'advertisement/bindtab/basic'}</div></div>
+                <div class="tab-pane  {if $_GPC['bindtab']=='option'}active{/if}" id="tab_option"> <div class="panel-body">{template 'advertisement/bindtab/option'}</div></div>
+                <div class="tab-pane {if $_GPC['bindtab']=='des'}active{/if}" id="tab_des"> <div class="panel-body" style='padding:0;'>{template 'advertisement/bindtab/des'}</div></div>
+            </div>
+        </div>
+
+    </div>
+    {ife 'advertisement' $item}
+    <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-9 subtitle">
+            <input type="submit" value="确认绑定" class="btn btn-primary"/>
+        </div>
+    </div>
+    {/if}
+    </form>
+</div>
+
+
+
+
+{template '_footer'}
